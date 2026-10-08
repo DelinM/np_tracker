@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import bisect
+import html
 import json
 import re
 import sys
@@ -21,7 +22,7 @@ import time
 import zipfile
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from io import BytesIO
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -34,12 +35,9 @@ DATA = ROOT / "data"
 CACHE = DATA / "cache"
 PDF_CACHE = CACHE / "pdfs"
 PRICE_CACHE = CACHE / "prices"
-TRADES_PATH = DATA / "trades.json"
-SNAPSHOT_PATH = DATA / "snapshot.json"
+MEMBERS_PATH = DATA / "members.json"
 
 PARSER_VERSION = 3
-MEMBER_LAST = "pelosi"
-MEMBER_FIRST = "nancy"
 FIRST_YEAR = 2012
 CLERK_INDEX = "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/{year}FD.zip"
 CLERK_PDF = "https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/{year}/{doc_id}.pdf"
@@ -96,8 +94,98 @@ CODE_RE = re.compile(r"\[([A-Za-z]{2,4})\]")
 MONEY_RE = re.compile(r"[\d,]+(?:\.\d+)?")
 
 
+def member_dir(slug: str) -> Path:
+    return DATA / "politicians" / slug
+
+
+def trades_path(slug: str) -> Path:
+    return member_dir(slug) / "trades.json"
+
+
+def snapshot_path(slug: str) -> Path:
+    return member_dir(slug) / "snapshot.json"
+
+
+def load_members() -> list[dict]:
+    return json.loads(MEMBERS_PATH.read_text())
+
+
+def house_name_match(last: str, first: str, member: dict) -> bool:
+    if last != member["last"].lower():
+        return False
+    want = member["first"].lower()
+    return first == want or first.startswith(want + " ") or first.startswith(want + ".")
+
+
+def due_now() -> bool:
+    now = datetime.now(NY)
+    minutes = now.hour * 60 + now.minute
+    for hour, minute in ((9, 0), (12, 0), (15, 30)):
+        if abs(minutes - (hour * 60 + minute)) <= 20:
+            return True
+    return False
+
+
 def now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def align_transaction_date(tx: str | None, filed: str | None, notified: str | None = None) -> str | None:
+    """Keep a trade on or before the day it was filed.
+
+    Scanned PTRs often misread the year (2023 as 2027, 2021 as 2027). A filing
+    cannot disclose a trade that had not happened yet, so an impossible year is
+    moved back to the latest year that still falls on or before the filing.
+    """
+    if not tx:
+        return None
+    try:
+        trade = date.fromisoformat(tx)
+    except ValueError:
+        return None
+    filed_day = None
+    if filed:
+        try:
+            filed_day = date.fromisoformat(filed)
+        except ValueError:
+            filed_day = None
+    note = None
+    if notified:
+        try:
+            note = date.fromisoformat(notified)
+        except ValueError:
+            note = None
+        if note and filed_day and note > filed_day + timedelta(days=45):
+            note = None
+    # The clerk's filing date is the hard stop. A notification a day or two
+    # earlier still belongs to a real electronic filing.
+    if filed_day and trade <= filed_day:
+        return tx
+    if filed_day is None:
+        return tx
+    limit = note if note and note <= filed_day else filed_day
+    # December (or later) trades are filed the following January, and the scan
+    # copies the filing year onto the trade. Any year past the filing year is
+    # the same kind of misread.
+    wrap = trade.month >= 10 and limit.month <= 2
+    if trade.year > limit.year or wrap:
+        year = limit.year if (trade.month, trade.day) <= (limit.month, limit.day) else limit.year - 1
+        try:
+            fixed = date(year, trade.month, trade.day)
+        except ValueError:
+            return None
+        if date(2012, 1, 1) <= fixed <= limit and 0 < trade.year - fixed.year <= 10:
+            return fixed.isoformat()
+        return None
+    # 11/19 is often read as 12/19, which lands just after the filing.
+    if trade.month == 12:
+        try:
+            fixed = trade.replace(month=11)
+        except ValueError:
+            return None
+        if date(2012, 1, 1) <= fixed <= limit and (limit - fixed).days <= 60:
+            return fixed.isoformat()
+    return None
 
 
 def to_iso(value: str) -> str:
@@ -397,7 +485,7 @@ def download(http: requests.Session, url: str) -> bytes | None:
     return None
 
 
-def load_index(http: requests.Session, year: int) -> list[dict]:
+def load_index(http: requests.Session, year: int, member: dict) -> list[dict]:
     CACHE.mkdir(parents=True, exist_ok=True)
     zip_path = CACHE / f"{year}FD.zip"
     if not zip_path.exists():
@@ -413,8 +501,8 @@ def load_index(http: requests.Session, year: int) -> list[dict]:
         if xml_name:
             root = ET.fromstring(archive.read(xml_name))
             rows = []
-            for member in root:
-                rows.append({child.tag: (child.text or "").strip() for child in member})
+            for node in root:
+                rows.append({child.tag: (child.text or "").strip() for child in node})
         else:
             txt_name = next(n for n in names if n.lower().endswith(".txt"))
             rows = []
@@ -431,7 +519,7 @@ def load_index(http: requests.Session, year: int) -> list[dict]:
         last = (row.get("Last") or "").strip().lower()
         first = (row.get("First") or "").strip().lower()
         kind = (row.get("FilingType") or "").strip().upper()
-        if last != MEMBER_LAST or first != MEMBER_FIRST or kind != "P":
+        if not house_name_match(last, first, member) or kind != "P":
             continue
         doc_id = (row.get("DocID") or "").strip()
         filing_year = int((row.get("Year") or year))
@@ -444,7 +532,7 @@ def load_index(http: requests.Session, year: int) -> list[dict]:
                 "pdfUrl": CLERK_PDF.format(year=filing_year, doc_id=doc_id),
             }
         )
-    print(f"[index] {year}: {len(filings)} Pelosi PTR filings")
+    print(f"[index] {year}: {len(filings)} {member['name']} PTR filings")
     return filings
 
 
@@ -459,8 +547,14 @@ def parse_filing(http: requests.Session, filing: dict) -> tuple[list[dict], str]
         time.sleep(0.25)
     text = extract_pdf_text(path.read_bytes())
     if not text.strip():
-        return [], "scanned"
-    trades = parse_ptr_text(text)
+        from scanned import read_scanned_pdf
+
+        trades, status = read_scanned_pdf(path)
+        if status != "ocr":
+            return [], status
+    else:
+        trades = parse_ptr_text(text)
+        status = "ok"
     if not trades:
         fail_dir = CACHE / "unparsed"
         fail_dir.mkdir(parents=True, exist_ok=True)
@@ -472,7 +566,7 @@ def parse_filing(http: requests.Session, filing: dict) -> tuple[list[dict], str]
         trade["pdfUrl"] = filing["pdfUrl"]
         trade["filingDate"] = filing["filingDate"]
         trade["year"] = filing["year"]
-    return trades, "ok"
+    return trades, status
 
 
 def dedupe_trades(trades: list[dict]) -> list[dict]:
@@ -513,23 +607,33 @@ def dedupe_trades(trades: list[dict]) -> list[dict]:
     return [kept[key] for key in order]
 
 
-def load_cached_trades() -> dict | None:
-    if not TRADES_PATH.exists():
+def load_cached_trades(slug: str) -> dict | None:
+    path = trades_path(slug)
+    if not path.exists():
         return None
-    data = json.loads(TRADES_PATH.read_text())
+    data = json.loads(path.read_text())
     if data.get("parserVersion") != PARSER_VERSION:
         return None
     return data
 
 
-def collect_trades(http: requests.Session, reparse: bool) -> dict:
+def fresh_trade_ids(slug: str, trades: list[dict]) -> list[dict]:
+    path = trades_path(slug)
+    if not path.exists():
+        return []
+    previous = json.loads(path.read_text())
+    known = {trade.get("id") for trade in previous.get("trades", [])}
+    return [trade for trade in trades if trade.get("id") not in known]
+
+
+def collect_house(http: requests.Session, member: dict, reparse: bool) -> tuple[dict, list[dict]]:
     years = range(FIRST_YEAR, datetime.now(NY).year + 1)
     filings: list[dict] = []
     for year in years:
-        filings.extend(load_index(http, year))
+        filings.extend(load_index(http, year, member))
     filings.sort(key=lambda item: (item["filingDate"], item["docId"]))
 
-    cached = None if reparse else load_cached_trades()
+    cached = None if reparse else load_cached_trades(member["slug"])
     known = {trade["docId"]: [] for trade in (cached or {}).get("trades", [])}
     for trade in (cached or {}).get("trades", []):
         known.setdefault(trade["docId"], []).append(trade)
@@ -545,11 +649,12 @@ def collect_trades(http: requests.Session, reparse: bool) -> dict:
             "stateDst": filing["stateDst"],
             "pdfUrl": filing["pdfUrl"],
         }
-        if filing["docId"] in known and filing_status.get(filing["docId"], {}).get("status") == "ok":
-            parsed = known[filing["docId"]]
-            status_row["status"] = "ok"
-            status_row["tradeCount"] = len(parsed)
-            print(f"[pdf] {filing['docId']} cached ({len(parsed)} trades)")
+        saved = filing_status.get(filing["docId"])
+        if saved and saved.get("status") in {"ok", "ocr", "empty", "image"}:
+            parsed = known.get(filing["docId"], [])
+            status_row["status"] = saved["status"]
+            status_row["tradeCount"] = saved.get("tradeCount", len(parsed))
+            print(f"[pdf] {filing['docId']} cached ({saved['status']}, {len(parsed)} trades)")
         else:
             parsed, status = parse_filing(http, filing)
             status_row["status"] = status
@@ -562,16 +667,115 @@ def collect_trades(http: requests.Session, reparse: bool) -> dict:
     trades = dedupe_trades(trades)
     if before != len(trades):
         print(f"[book] dropped {before - len(trades)} restated filings")
+    return stored_filings, trades
 
+
+def collect_senate(member: dict) -> tuple[list[dict], list[dict]]:
+    from senate import OWNERS, reports_for, senate_ticker
+
+    reports = reports_for(member)
+    filings = []
+    trades = []
+    for report in reports:
+        href = report.get("href") or ""
+        doc_id = href.strip("/").split("/")[-1] or "senate"
+        pdf_url = "https://efdsearch.senate.gov" + href if href.startswith("/") else href
+        filing_date = to_iso(report.get("filed") or "")
+        rows = report.get("rows") or []
+        filings.append(
+            {
+                "docId": doc_id,
+                "year": int(filing_date[:4]) if filing_date[:4].isdigit() else None,
+                "filingDate": filing_date,
+                "stateDst": member.get("district") or "",
+                "pdfUrl": pdf_url,
+                "status": "ok" if rows else "empty",
+                "tradeCount": len(rows),
+            }
+        )
+        for index, cells in enumerate(rows, start=1):
+            number, tx_date, owner, ticker_cell, asset_name, asset_type, tx_type, amount = [
+                html.unescape(cell) for cell in cells[:8]
+            ]
+            comment = cells[8] if len(cells) > 8 else ""
+            ticker, option_right = senate_ticker(ticker_cell, asset_name, asset_type)
+            description = "" if comment in {"", "--"} else comment
+            if option_right:
+                description = f"{option_right} option. {description}".strip()
+            lo, hi, label = parse_amount(amount)
+            classified = classify(description, tx_type, "OP" if option_right else None)
+            if option_right:
+                classified["kind"] = "option"
+                classified["optionRight"] = option_right
+                classified["optionSide"] = "sold" if str(tx_type).lower().startswith("sale") else "purchased"
+            elif ticker is None and classified.get("kind") in {"buy", "sell", "exercise", "transfer", "receive"}:
+                classified["kind"] = "other"
+            trades.append(
+                {
+                    "id": f"{doc_id}-{number or index}",
+                    "docId": doc_id,
+                    "pdfUrl": pdf_url,
+                    "filingDate": filing_date,
+                    "year": filings[-1]["year"],
+                    "transactionDate": to_iso(tx_date),
+                    "owner": OWNERS.get(str(owner).strip().lower(), "self"),
+                    "ticker": ticker,
+                    "name": asset_name,
+                    "assetType": asset_type,
+                    "amountMin": lo,
+                    "amountMax": hi,
+                    "amountLabel": label,
+                    "description": description or asset_name,
+                    **classified,
+                }
+            )
+    return filings, trades
+
+
+def collect_trades(http: requests.Session, member: dict, reparse: bool) -> tuple[dict, list[dict]]:
+    if member.get("chamber") == "senate":
+        stored_filings, trades = collect_senate(member)
+    else:
+        stored_filings, trades = collect_house(http, member, reparse)
+    if not trades:
+        previous = load_cached_trades(member["slug"])
+        if previous and previous.get("trades"):
+            print(f"[sync] {member['slug']}: source returned no trades; keeping the saved book")
+            return previous, []
+    kept = []
+    repaired = dropped = 0
+    for trade in trades:
+        original = trade.get("transactionDate") or ""
+        try:
+            datetime.fromisoformat(original)
+        except ValueError:
+            dropped += 1
+            continue
+        fixed = align_transaction_date(original, trade.get("filingDate"), trade.get("notificationDate"))
+        if not fixed:
+            dropped += 1
+            continue
+        if fixed != original:
+            repaired += 1
+            trade["transactionDate"] = fixed
+        kept.append(trade)
+    if repaired or dropped:
+        print(f"[dates] {member['slug']}: repaired {repaired} trade dates, dropped {dropped} still after the filing")
+    trades = dedupe_trades(kept)
+    fresh = fresh_trade_ids(member["slug"], trades)
     document = {
         "parserVersion": PARSER_VERSION,
         "generatedAt": now_iso(),
+        "member": member["slug"],
         "filings": stored_filings,
         "trades": trades,
     }
-    DATA.mkdir(parents=True, exist_ok=True)
-    TRADES_PATH.write_text(json.dumps(document, indent=2) + "\n")
-    return document
+    path = trades_path(member["slug"])
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(document, indent=2) + "\n")
+    if member["slug"] == "pelosi":
+        (DATA / "trades.json").write_text(json.dumps(document, indent=2) + "\n")
+    return document, fresh
 
 
 @dataclass
@@ -582,6 +786,7 @@ class Lot:
     trade_id: str
     owner: str
     note: str
+    pdf_url: str = ""
 
     @property
     def cost(self) -> float:
@@ -760,7 +965,10 @@ def price_lookup(chart: dict | None):
         if index < 0:
             return None
         last = dates[index]
-        gap = (datetime.fromisoformat(day) - datetime.fromisoformat(last)).days
+        try:
+            gap = (datetime.fromisoformat(day) - datetime.fromisoformat(last)).days
+        except ValueError:
+            return None
         if gap > 10:
             return None
         return bars[last]
@@ -877,7 +1085,7 @@ def add_lot(books: Books, ticker: str, shares: float, price: float, trade: dict,
         books.warn(f"{ticker} {trade['transactionDate']}: ignored an implausible share count of {shares:,.0f}.")
         return
     books.lots.setdefault(ticker, []).append(
-        Lot(trade["transactionDate"], shares, price, trade["id"], trade["owner"], note)
+        Lot(trade["transactionDate"], shares, price, trade["id"], trade["owner"], note, trade.get("pdfUrl") or "")
     )
     books.deployed += shares * price
 
@@ -1025,7 +1233,7 @@ def book_trade(books: Books, trade: dict, quotes, charts: dict[str, dict]) -> No
     trade["bookedPrice"] = round(fill, 4)
 
 
-def build_snapshot(http: requests.Session, document: dict) -> dict:
+def build_snapshot(http: requests.Session, document: dict, member: dict) -> dict:
     trades = document["trades"]
     filings = document["filings"]
     stock_tickers = sorted(
@@ -1149,11 +1357,19 @@ def build_snapshot(http: requests.Session, document: dict) -> dict:
                     "owner": lot.owner,
                     "note": lot.note,
                     "tradeId": lot.trade_id,
+                    "pdfUrl": lot.pdf_url,
                 }
                 for lot in lots
                 if lot.shares > 0.01
             ],
         }
+        if holding["lots"]:
+            latest = max(holding["lots"], key=lambda lot: lot["date"])
+            holding["latestBuy"] = latest["date"]
+            holding["sourceUrl"] = latest.get("pdfUrl") or None
+        else:
+            holding["latestBuy"] = None
+            holding["sourceUrl"] = None
         holdings.append(holding)
         if market is not None:
             priced_value += market
@@ -1237,19 +1453,34 @@ def build_snapshot(http: requests.Session, document: dict) -> dict:
     total_pnl = unrealized + books.realized_total
     prior_value = priced_value - day_change
     last_filing = max((item["filingDate"] for item in filings), default=None)
-    district = ""
-    if filings:
-        latest = max(filings, key=lambda item: item["filingDate"])
-        district = latest.get("stateDst") or ""
-        match = re.match(r"([A-Z]{2})(\d+)", district)
-        if match:
-            district = f"{match.group(1)}-{int(match.group(2))}"
+    if member.get("chamber") == "senate":
+        district = member.get("district") or ""
+        source = {
+            "name": "U.S. Senate Financial Disclosures",
+            "url": "https://efdsearch.senate.gov/search/",
+        }
+        chamber = "U.S. Senate"
+    else:
+        district = ""
+        if filings:
+            latest = max(filings, key=lambda item: item["filingDate"])
+            district = latest.get("stateDst") or ""
+            match = re.match(r"([A-Z]{2})(\d+)", district)
+            if match:
+                district = f"{match.group(1)}-{int(match.group(2))}"
+        source = {
+            "name": "Clerk of the House of Representatives",
+            "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/",
+        }
+        chamber = "U.S. House"
 
-    failed = [item["docId"] for item in filings if item.get("status") not in {"ok"}]
+    failed = [item["docId"] for item in filings if item.get("status") in {"empty", "missing"}]
+    if any(item.get("status") == "ocr" for item in filings):
+        books.warn("Some filings are scanned images. Those rows were read with OCR; open the filing PDF to check them.")
     if failed:
         books.warn(
             "Some filings could not be read as text ("
-            + ", ".join(failed[:12])
+            + ", ".join(str(item) for item in failed[:12])
             + ("…" if len(failed) > 12 else "")
             + ")."
         )
@@ -1258,14 +1489,14 @@ def build_snapshot(http: requests.Session, document: dict) -> dict:
         "generatedAt": now_iso(),
         "asOf": datetime.now(NY).strftime("%b %-d, %Y"),
         "member": {
-            "name": "Nancy Pelosi",
-            "district": district,
-            "chamber": "U.S. House",
+            "name": member["name"],
+            "nameZh": member.get("nameZh") or member["name"],
+            "slug": member["slug"],
+            "district": district or member.get("district") or "",
+            "chamber": chamber,
+            "party": member.get("party") or "",
         },
-        "source": {
-            "name": "Clerk of the House of Representatives",
-            "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/",
-        },
+        "source": source,
         "summary": {
             "marketValue": round(priced_value, 2),
             "costBasis": round(priced_cost, 2),
@@ -1278,7 +1509,7 @@ def build_snapshot(http: requests.Session, document: dict) -> dict:
             "dayChangePct": (day_change / prior_value) if prior_value else None,
             "positions": len(holdings),
             "trades": len(trades),
-            "filings": len([item for item in filings if item.get("status") == "ok"]),
+            "filings": len([item for item in filings if item.get("status") in {"ok", "ocr"}]),
             "firstTrade": min((trade["transactionDate"] for trade in trades), default=None),
             "lastFiling": last_filing,
             "deployed": round(books.deployed, 2),
@@ -1292,7 +1523,11 @@ def build_snapshot(http: requests.Session, document: dict) -> dict:
         "filings": filings,
         "warnings": books.warnings,
     }
-    SNAPSHOT_PATH.write_text(json.dumps(snapshot, indent=2) + "\n")
+    destination = snapshot_path(member["slug"])
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(snapshot, indent=2) + "\n")
+    if member["slug"] == "pelosi":
+        (DATA / "snapshot.json").write_text(json.dumps(snapshot, indent=2) + "\n")
     print(
         f"[book] {len(holdings)} positions, value ${priced_value:,.0f}, "
         f"unrealized ${unrealized:,.0f}, realized ${books.realized_total:,.0f}"
@@ -1314,17 +1549,62 @@ def debug_pdfs(paths: list[str]) -> None:
             print(f"   {trade['description'][:160]}")
 
 
+def write_index(snapshots: list[dict]) -> None:
+    by_slug = {snapshot["member"]["slug"]: snapshot for snapshot in snapshots}
+    cards = []
+    for member in load_members():
+        if member["slug"] in by_slug:
+            continue
+        path = snapshot_path(member["slug"])
+        if path.exists():
+            by_slug[member["slug"]] = json.loads(path.read_text())
+    ordered = [by_slug[member["slug"]] for member in load_members() if member["slug"] in by_slug]
+    for snapshot in ordered:
+        summary = snapshot["summary"]
+        cards.append(
+            {
+                "slug": snapshot["member"]["slug"],
+                "name": snapshot["member"]["name"],
+                "marketValue": summary["marketValue"],
+                "dayChange": summary["dayChange"],
+                "dayChangePct": summary["dayChangePct"],
+                "positions": summary["positions"],
+                "lastFiling": summary["lastFiling"],
+                "generatedAt": snapshot["generatedAt"],
+            }
+        )
+    (DATA / "index.json").write_text(json.dumps({"generatedAt": now_iso(), "members": cards}, indent=2) + "\n")
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Sync Nancy Pelosi PTR filings into a portfolio snapshot.")
+    parser = argparse.ArgumentParser(description="Sync congressional PTR filings into portfolio snapshots.")
     parser.add_argument("--reparse", action="store_true", help="Re-read every cached PDF.")
+    parser.add_argument("--only", nargs="*", help="Slugs to sync, for example pelosi khanna.")
+    parser.add_argument("--if-due", action="store_true", help="Exit unless it is 9:00, 12:00, or 15:30 ET.")
     parser.add_argument("--debug-pdf", nargs="*", help="Parse local PDFs and exit.")
     args = parser.parse_args()
     if args.debug_pdf:
         debug_pdfs(args.debug_pdf)
         return
+    if args.if_due and not due_now():
+        print("[sync] outside the 9:00, 12:00, and 15:30 ET windows")
+        return
+    members = load_members()
+    if args.only:
+        wanted = set(args.only)
+        members = [member for member in members if member["slug"] in wanted]
     http = session()
-    document = collect_trades(http, reparse=args.reparse)
-    build_snapshot(http, document)
+    fresh: list[tuple[str, list[dict]]] = []
+    snapshots = []
+    for member in members:
+        print(f"\n==== {member['name']} ====")
+        document, new_trades = collect_trades(http, member, reparse=args.reparse)
+        snapshots.append(build_snapshot(http, document, member))
+        fresh.append((member["name"], new_trades))
+    write_index(snapshots)
+    from alerts import send_trades
+
+    send_trades(fresh)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { HoldingsTable } from "@/components/HoldingsTable";
 import { PortfolioChart } from "@/components/PortfolioChart";
-import { ACTION_LABEL, OWNER_LABEL, cleanNote, money, prettyDate, price, shares, signedMoney, signedPct, tone } from "@/lib/format";
+import { cleanNote, money, prettyDate, price, shares, signedMoney, signedPct, tone } from "@/lib/format";
+import { translateWarning, useI18n } from "@/lib/i18n";
 import type { Snapshot } from "@/lib/types";
 
 function Stat({ label, value, detail, className }: { label: string; value: string; detail?: string; className?: string }) {
@@ -14,31 +17,33 @@ function Stat({ label, value, detail, className }: { label: string; value: strin
   );
 }
 
-export function Dashboard({ snapshot }: { snapshot: Snapshot }) {
+export function Dashboard({ snapshot, base }: { snapshot: Snapshot; base: string }) {
+  const { locale, copy } = useI18n();
   const { summary, holdings, history, options, other, trades, warnings } = snapshot;
   const recent = trades.slice(0, 6);
+  const date = (iso: string | null) => prettyDate(iso, locale);
 
   return (
     <div className="space-y-10">
       <section>
-        <p className="text-sm text-muted">Disclosed market value</p>
+        <p className="text-sm text-muted">{copy.marketValue}</p>
         <p className="mt-2 font-serif text-5xl tracking-tight tabular-nums sm:text-7xl">
           {money(summary.marketValue)}
         </p>
         <p className={`mt-3 text-lg tabular-nums ${tone(summary.dayChange)}`}>
           {signedMoney(summary.dayChange)} <span className="text-base">{signedPct(summary.dayChangePct)}</span>
-          <span className="ml-2 text-sm text-muted">today</span>
+          <span className="ml-2 text-sm text-muted">{copy.today}</span>
         </p>
         <div className="mt-8 grid gap-6 sm:grid-cols-3">
           <Stat
-            label="Unrealized"
+            label={copy.unrealized}
             value={signedMoney(summary.unrealized)}
             detail={signedPct(summary.unrealizedPct)}
             className={tone(summary.unrealized)}
           />
-          <Stat label="Realized" value={signedMoney(summary.realized)} className={tone(summary.realized)} />
+          <Stat label={copy.realized} value={signedMoney(summary.realized)} className={tone(summary.realized)} />
           <Stat
-            label="Total profit"
+            label={copy.totalProfit}
             value={signedMoney(summary.totalPnl)}
             detail={signedPct(summary.totalPnlPct)}
             className={tone(summary.totalPnl)}
@@ -48,20 +53,20 @@ export function Dashboard({ snapshot }: { snapshot: Snapshot }) {
 
       <dl className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
         <div>
-          <dt className="text-muted">Open positions</dt>
+          <dt className="text-muted">{copy.openPositions}</dt>
           <dd className="mt-1 text-lg tabular-nums">{summary.positions}</dd>
         </div>
         <div>
-          <dt className="text-muted">Cost basis</dt>
+          <dt className="text-muted">{copy.costBasis}</dt>
           <dd className="mt-1 text-lg tabular-nums">{money(summary.costBasis)}</dd>
         </div>
         <div>
-          <dt className="text-muted">First tracked trade</dt>
-          <dd className="mt-1 text-lg">{prettyDate(summary.firstTrade)}</dd>
+          <dt className="text-muted">{copy.firstTrade}</dt>
+          <dd className="mt-1 text-lg">{date(summary.firstTrade)}</dd>
         </div>
         <div>
-          <dt className="text-muted">Latest filing</dt>
-          <dd className="mt-1 text-lg">{prettyDate(summary.lastFiling)}</dd>
+          <dt className="text-muted">{copy.latestFiling}</dt>
+          <dd className="mt-1 text-lg">{date(summary.lastFiling)}</dd>
         </div>
       </dl>
 
@@ -69,28 +74,30 @@ export function Dashboard({ snapshot }: { snapshot: Snapshot }) {
 
       <section>
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="font-serif text-3xl">Positions</h2>
-          <p className="text-sm text-muted">{summary.filings} filings parsed</p>
+          <h2 className="font-serif text-3xl">{copy.positions}</h2>
+          <p className="text-sm text-muted">{copy.filingsParsed(summary.filings)}</p>
         </div>
-        <HoldingsTable holdings={holdings} />
+        <HoldingsTable holdings={holdings} base={base} />
       </section>
 
       {options.length ? (
         <section>
-          <h2 className="mb-4 font-serif text-3xl">Open options</h2>
+          <h2 className="mb-4 font-serif text-3xl">{copy.openOptions}</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {options.map((option) => (
               <div key={`${option.ticker}-${option.strike}-${option.expiry}-${option.opened}`} className="rounded-2xl border border-line bg-panel/80 p-4">
                 <div className="flex items-baseline justify-between">
                   <p className="font-mono text-sm">{option.ticker}</p>
-                  <p className="text-xs uppercase tracking-wide text-gold">{option.right ?? "option"}</p>
+                  <p className="text-xs uppercase tracking-wide text-gold">
+                    {option.right === "call" ? copy.call : option.right === "put" ? copy.put : copy.option}
+                  </p>
                 </div>
                 <p className="mt-2 text-lg tabular-nums">
-                  {option.contracts} contracts
+                  {copy.contracts(option.contracts)}
                   {option.strike != null ? ` @ ${price(option.strike)}` : ""}
                 </p>
                 <p className="mt-1 text-sm text-muted">
-                  {option.expiry ? `Expires ${prettyDate(option.expiry)}` : "Expiry not stated"} · {OWNER_LABEL[option.owner]} · opened {prettyDate(option.opened)}
+                  {option.expiry ? copy.expires(date(option.expiry)) : copy.expiryUnknown} · {copy.owners[option.owner]} · {copy.opened(date(option.opened))}
                 </p>
               </div>
             ))}
@@ -100,24 +107,24 @@ export function Dashboard({ snapshot }: { snapshot: Snapshot }) {
 
       <section>
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="font-serif text-3xl">Recent activity</h2>
-          <Link href="/activity" className="text-sm text-gold hover:underline">
-            Full blotter
+          <h2 className="font-serif text-3xl">{copy.recent}</h2>
+          <Link href={`${base}/activity`} className="text-sm text-gold hover:underline">
+            {copy.fullBlotter}
           </Link>
         </div>
         <ol className="divide-y divide-line overflow-hidden rounded-3xl border border-line bg-panel/80">
           {recent.map((trade) => (
             <li key={trade.id} className="grid gap-2 px-4 py-3 sm:grid-cols-[140px_88px_1fr_auto] sm:items-center">
               <div>
-                <p className="text-sm">{prettyDate(trade.transactionDate)}</p>
-                <p className="text-xs text-muted">Filed {prettyDate(trade.filingDate)}</p>
+                <p className="text-sm">{date(trade.transactionDate)}</p>
+                <p className="text-xs text-muted">{copy.filed} {date(trade.filingDate)}</p>
               </div>
               <p className="font-mono text-sm">{trade.ticker ?? "—"}</p>
               <div>
                 <p className="text-sm">
-                  <span className="text-gold">{ACTION_LABEL[trade.action]}</span>
-                  <span className="text-muted"> · {OWNER_LABEL[trade.owner]}</span>
-                  {trade.shares != null ? <span className="text-muted"> · {shares(trade.shares)} sh</span> : null}
+                  <span className="text-gold">{copy.actions[trade.action]}</span>
+                  <span className="text-muted"> · {copy.owners[trade.owner]}</span>
+                  {trade.shares != null ? <span className="text-muted"> · {shares(trade.shares)} {copy.sharesShort}</span> : null}
                 </p>
                 <p className="truncate text-xs text-muted">{cleanNote(trade.description) || trade.name}</p>
               </div>
@@ -131,15 +138,13 @@ export function Dashboard({ snapshot }: { snapshot: Snapshot }) {
 
       {other.length ? (
         <section>
-          <h2 className="mb-3 font-serif text-3xl">Outside the priced book</h2>
-          <p className="mb-4 max-w-2xl text-sm text-muted">
-            These disclosures have no listed ticker, so they are not marked to market.
-          </p>
+          <h2 className="mb-3 font-serif text-3xl">{copy.outside}</h2>
+          <p className="mb-4 max-w-2xl text-sm text-muted">{copy.outsideNote}</p>
           <ul className="space-y-2 text-sm">
             {other.slice(0, 8).map((item) => (
               <li key={item.pdfUrl + item.date + item.name} className="flex flex-wrap justify-between gap-2 border-b border-line py-2">
                 <span>
-                  {prettyDate(item.date)} · {item.name}
+                  {date(item.date)} · {item.name}
                 </span>
                 <span className="text-muted">{item.amountLabel}</span>
               </li>
@@ -150,10 +155,10 @@ export function Dashboard({ snapshot }: { snapshot: Snapshot }) {
 
       {warnings.length ? (
         <details className="text-sm text-muted">
-          <summary className="cursor-pointer text-cream">Reconstruction notes ({warnings.length})</summary>
+          <summary className="cursor-pointer text-cream">{copy.notes(warnings.length)}</summary>
           <ul className="mt-3 list-disc space-y-1 pl-5">
             {warnings.map((warning) => (
-              <li key={warning}>{warning}</li>
+              <li key={warning}>{translateWarning(warning, locale)}</li>
             ))}
           </ul>
         </details>

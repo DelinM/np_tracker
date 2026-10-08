@@ -18,6 +18,7 @@ export type Lot = {
   owner: Owner;
   note: string;
   tradeId: string;
+  pdfUrl?: string | null;
 };
 
 export type Holding = {
@@ -37,6 +38,8 @@ export type Holding = {
   weight: number | null;
   owners: Owner[];
   lots: Lot[];
+  latestBuy?: string | null;
+  sourceUrl?: string | null;
 };
 
 export type HistoryPoint = {
@@ -111,7 +114,7 @@ export type Filing = {
 export type Snapshot = {
   generatedAt: string;
   asOf: string;
-  member: { name: string; district: string; chamber: string };
+  member: { name: string; nameZh?: string; slug?: string; district: string; chamber: string; party?: string };
   source: { name: string; url: string };
   summary: {
     marketValue: number;

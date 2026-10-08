@@ -1,11 +1,5 @@
-import { ActivityTable } from "@/components/ActivityTable";
-import { snapshot } from "@/lib/snapshot";
+import { redirect } from "next/navigation";
 
-export default async function ActivityPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ ticker?: string }>;
-}) {
-  const params = await searchParams;
-  return <ActivityTable trades={snapshot.trades} initialQuery={params.ticker ?? ""} />;
+export default function LegacyActivityPage() {
+  redirect("/pelosi/activity");
 }

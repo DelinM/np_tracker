@@ -1,6 +1,6 @@
-import { Dashboard } from "@/components/Dashboard";
-import { snapshot } from "@/lib/snapshot";
+import { Directory } from "@/components/Directory";
+import { loadCards } from "@/lib/portfolio";
 
 export default function HomePage() {
-  return <Dashboard snapshot={snapshot} />;
+  return <Directory cards={loadCards()} />;
 }

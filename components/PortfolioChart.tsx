@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import { axisMoney, money, prettyDate, signedMoney, tone } from "@/lib/format";
+import { useI18n } from "@/lib/i18n";
 import type { HistoryPoint } from "@/lib/types";
 
 const ranges = ["1M", "3M", "YTD", "1Y", "ALL"] as const;
@@ -40,6 +41,7 @@ function thin(points: HistoryPoint[], max = 420) {
 }
 
 export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
+  const { locale, copy } = useI18n();
   const [range, setRange] = useState<Range>("ALL");
   const [mode, setMode] = useState<"value" | "pnl">("value");
   const data = useMemo(() => thin(sliceHistory(history, range)), [history, range]);
@@ -52,8 +54,8 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
         <div className="flex rounded-full border border-line p-1">
           {(
             [
-              ["value", "Value"],
-              ["pnl", "Profit"],
+              ["value", copy.chartValue],
+              ["pnl", copy.chartProfit],
             ] as const
           ).map(([key, label]) => (
             <button
@@ -76,7 +78,7 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
                 range === item ? "bg-panel-2 text-cream" : "text-muted hover:text-cream"
               }`}
             >
-              {item}
+              {copy.ranges[item]}
             </button>
           ))}
         </div>
@@ -97,10 +99,11 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
                 tickFormatter={(value: string) => {
                   const [year, month, day] = value.split("-").map(Number);
                   const date = new Date(year, month - 1, day);
+                  const tag = locale === "zh" ? "zh-CN" : "en-US";
                   if (range === "1M" || range === "3M") {
-                    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                    return date.toLocaleDateString(tag, { month: locale === "zh" ? "long" : "short", day: "numeric" });
                   }
-                  return date.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
+                  return date.toLocaleDateString(tag, { month: "short", year: "2-digit" });
                 }}
                 minTickGap={36}
                 tick={{ fill: "#9c978d", fontSize: 12 }}
@@ -121,9 +124,9 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
                   const point = payload[0].payload as HistoryPoint;
                   return (
                     <div className="rounded-2xl border border-line bg-ink px-3 py-2 text-xs shadow-xl">
-                      <p className="text-muted">{prettyDate(label)}</p>
+                      <p className="text-muted">{prettyDate(label, locale)}</p>
                       <p className="mt-1 font-medium text-cream">{money(point.value)}</p>
-                      <p className={tone(point.pnl)}>Profit {signedMoney(point.pnl)}</p>
+                      <p className={tone(point.pnl)}>{copy.profitTip} {signedMoney(point.pnl)}</p>
                     </div>
                   );
                 }}
@@ -151,14 +154,14 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted">
-            Not enough priced history yet.
+            {copy.noHistory}
           </div>
         )}
       </div>
       {mode === "value" ? (
-        <p className="mt-2 text-xs text-muted">Solid line is market value. Dashed line is remaining cost basis.</p>
+        <p className="mt-2 text-xs text-muted">{copy.valueCaption}</p>
       ) : (
-        <p className="mt-2 text-xs text-muted">Profit is unrealized gain on that day plus gains already realized.</p>
+        <p className="mt-2 text-xs text-muted">{copy.profitCaption}</p>
       )}
     </section>
   );

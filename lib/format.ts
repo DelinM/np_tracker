@@ -1,4 +1,3 @@
-import type { Owner, TradeAction } from "./types";
 
 export function money(value: number, digits = 0) {
   return new Intl.NumberFormat("en-US", {
@@ -52,12 +51,12 @@ export function price(value: number | null) {
   return money(value, digits);
 }
 
-export function prettyDate(iso: string | null) {
+export function prettyDate(iso: string | null, locale: "en" | "zh" = "en") {
   if (!iso) return "—";
   const [year, month, day] = iso.split("-").map(Number);
   if (!year || !month || !day) return iso;
-  return new Date(year, month - 1, day).toLocaleDateString("en-US", {
-    month: "short",
+  return new Date(year, month - 1, day).toLocaleDateString(locale === "zh" ? "zh-CN" : "en-US", {
+    month: locale === "zh" ? "long" : "short",
     day: "numeric",
     year: "numeric",
   });
@@ -68,24 +67,6 @@ export function tone(value: number | null | undefined) {
   return value > 0 ? "text-up" : "text-down";
 }
 
-export const ACTION_LABEL: Record<TradeAction, string> = {
-  buy: "Buy",
-  sell: "Sell",
-  exercise: "Exercise",
-  option: "Option",
-  transfer: "Transfer",
-  receive: "Receive",
-  exchange: "Exchange",
-  other: "Other",
-};
-
 export function cleanNote(text: string) {
   return text.replace(/\s*\$200\?\s*/g, " ").replace(/\s+/g, " ").trim();
 }
-
-export const OWNER_LABEL: Record<Owner, string> = {
-  self: "Member",
-  spouse: "Spouse",
-  joint: "Joint",
-  dependent: "Dependent",
-};

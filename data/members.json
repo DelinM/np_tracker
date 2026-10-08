@@ -1,0 +1,52 @@
+[
+  {
+    "slug": "pelosi",
+    "last": "pelosi",
+    "first": "nancy",
+    "name": "Nancy Pelosi",
+    "nameZh": "南希·佩洛西",
+    "chamber": "house",
+    "district": "CA-11",
+    "party": "D"
+  },
+  {
+    "slug": "khanna",
+    "last": "khanna",
+    "first": "rohit",
+    "name": "Ro Khanna",
+    "nameZh": "罗·康纳",
+    "chamber": "house",
+    "district": "CA-17",
+    "party": "D"
+  },
+  {
+    "slug": "mccaul",
+    "last": "mccaul",
+    "first": "michael",
+    "name": "Michael McCaul",
+    "nameZh": "迈克尔·麦考尔",
+    "chamber": "house",
+    "district": "TX-10",
+    "party": "R"
+  },
+  {
+    "slug": "moody",
+    "last": "Moody",
+    "first": "Ashley",
+    "name": "Ashley Moody",
+    "nameZh": "阿什莉·穆迪",
+    "chamber": "senate",
+    "district": "FL",
+    "party": "R"
+  },
+  {
+    "slug": "fetterman",
+    "last": "Fetterman",
+    "first": "John",
+    "name": "John Fetterman",
+    "nameZh": "约翰·费特曼",
+    "chamber": "senate",
+    "district": "PA",
+    "party": "D"
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-10-08T12:51:47+00:00",
+  "members": [
+    {
+      "slug": "pelosi",
+      "name": "Nancy Pelosi",
+      "marketValue": 89820743.79,
+      "dayChange": -715240.21,
+      "dayChangePct": -0.007900065569822937,
+      "positions": 22,
+      "lastFiling": "2026-10-02",
+      "generatedAt": "2026-10-08T05:42:30+00:00"
+    },
+    {
+      "slug": "khanna",
+      "name": "Ro Khanna",
+      "marketValue": 66140729.49,
+      "dayChange": -140514.96,
+      "dayChangePct": -0.0021199807150888983,
+      "positions": 474,
+      "lastFiling": "2026-09-04",
+      "generatedAt": "2026-10-08T12:51:26+00:00"
+    },
+    {
+      "slug": "mccaul",
+      "name": "Michael McCaul",
+      "marketValue": 98449819.08,
+      "dayChange": -604135.71,
+      "dayChangePct": -0.006099056935736153,
+      "positions": 226,
+      "lastFiling": "2026-07-08",
+      "generatedAt": "2026-10-08T12:51:47+00:00"
+    },
+    {
+      "slug": "moody",
+      "name": "Ashley Moody",
+      "marketValue": 4425544.65,
+      "dayChange": -465.63,
+      "dayChangePct": -0.00010520309964529152,
+      "positions": 11,
+      "lastFiling": "2025-05-13",
+      "generatedAt": "2026-10-08T06:23:13+00:00"
+    },
+    {
+      "slug": "fetterman",
+      "name": "John Fetterman",
+      "marketValue": 101621.4,
+      "dayChange": 379.71,
+      "dayChangePct": 0.0037505301647886395,
+      "positions": 5,
+      "lastFiling": "2026-10-07",
+      "generatedAt": "2026-10-08T06:23:42+00:00"
+    }
+  ]
+}

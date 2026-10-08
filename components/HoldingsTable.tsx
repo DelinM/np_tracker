@@ -2,12 +2,14 @@
 
 import { Fragment, useMemo, useState } from "react";
 import Link from "next/link";
-import { OWNER_LABEL, money, prettyDate, price, shares, signedMoney, signedPct, tone } from "@/lib/format";
+import { money, prettyDate, price, shares, signedMoney, signedPct, tone } from "@/lib/format";
+import { translateNote, useI18n } from "@/lib/i18n";
 import type { Holding } from "@/lib/types";
 
-type SortKey = "marketValue" | "dayChange" | "unrealizedPct" | "ticker" | "weight";
+type SortKey = "marketValue" | "dayChange" | "unrealizedPct" | "ticker" | "weight" | "latestBuy";
 
-export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
+export function HoldingsTable({ holdings, base }: { holdings: Holding[]; base: string }) {
+  const { locale, copy } = useI18n();
   const [open, setOpen] = useState<string | null>(null);
   const [sort, setSort] = useState<SortKey>("marketValue");
   const [direction, setDirection] = useState<-1 | 1>(-1);
@@ -15,8 +17,8 @@ export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
   const rows = useMemo(() => {
     const copy = [...holdings];
     copy.sort((a, b) => {
-      const left = sort === "ticker" ? a.ticker : (a[sort] ?? -Infinity);
-      const right = sort === "ticker" ? b.ticker : (b[sort] ?? -Infinity);
+      const left = sort === "ticker" ? a.ticker : sort === "latestBuy" ? a.latestBuy ?? "" : (a[sort] ?? -Infinity);
+      const right = sort === "ticker" ? b.ticker : sort === "latestBuy" ? b.latestBuy ?? "" : (b[sort] ?? -Infinity);
       if (left < right) return -1 * direction;
       if (left > right) return 1 * direction;
       return 0;
@@ -33,7 +35,7 @@ export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
   }
 
   if (!holdings.length) {
-    return <p className="text-sm text-muted">No open stock positions could be reconstructed from the filings.</p>;
+    return <p className="text-sm text-muted">{copy.noPositions}</p>;
   }
 
   const header = (key: SortKey, label: string, align = "right") => (
@@ -46,18 +48,45 @@ export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
   );
 
   return (
-    <div className="overflow-x-auto rounded-3xl border border-line bg-panel/80">
+    <div>
+      <div className="mb-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            setSort("marketValue");
+            setDirection(-1);
+          }}
+          className={`rounded-full px-3 py-1 text-xs uppercase tracking-wide ${
+            sort === "marketValue" ? "bg-cream text-ink" : "border border-line text-muted"
+          }`}
+        >
+          {copy.sortValue}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSort("latestBuy");
+            setDirection(-1);
+          }}
+          className={`rounded-full px-3 py-1 text-xs uppercase tracking-wide ${
+            sort === "latestBuy" ? "bg-cream text-ink" : "border border-line text-muted"
+          }`}
+        >
+          {copy.sortPurchase}
+        </button>
+      </div>
+      <div className="overflow-x-auto rounded-3xl border border-line bg-panel/80">
       <table className="w-full min-w-[920px] text-sm">
         <thead className="text-xs uppercase tracking-wide text-muted">
           <tr className="border-b border-line">
-            {header("ticker", "Position", "left")}
-            <th className="px-3 py-3 text-right font-medium">Shares</th>
-            <th className="px-3 py-3 text-right font-medium">Avg cost</th>
-            <th className="px-3 py-3 text-right font-medium">Last</th>
-            {header("dayChange", "Day")}
-            {header("marketValue", "Value")}
-            {header("unrealizedPct", "Return")}
-            {header("weight", "Weight")}
+            {header("ticker", copy.position, "left")}
+            <th className="px-3 py-3 text-right font-medium">{copy.shares}</th>
+            <th className="px-3 py-3 text-right font-medium">{copy.avgCost}</th>
+            <th className="px-3 py-3 text-right font-medium">{copy.last}</th>
+            {header("dayChange", copy.day)}
+            {header("marketValue", copy.value)}
+            {header("unrealizedPct", copy.return)}
+            {header("weight", copy.weight)}
           </tr>
         </thead>
         <tbody>
@@ -72,9 +101,23 @@ export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
                   <td className="sticky left-0 bg-panel px-3 py-3">
                     <div className="flex items-baseline gap-2">
                       <span className="font-mono text-[13px] text-cream">{holding.ticker}</span>
-                      <span className="text-xs text-muted">{holding.owners.map((owner) => OWNER_LABEL[owner]).join(" · ")}</span>
+                      <span className="text-xs text-muted">{holding.owners.map((owner) => copy.owners[owner]).join(" · ")}</span>
                     </div>
                     <p className="max-w-[240px] truncate text-xs text-muted">{holding.name}</p>
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
+                      {holding.latestBuy ? <span>{prettyDate(holding.latestBuy, locale)}</span> : null}
+                      {holding.sourceUrl ? (
+                        <a
+                          href={holding.sourceUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(event) => event.stopPropagation()}
+                          className="text-gold hover:underline"
+                        >
+                          {copy.filingLink}
+                        </a>
+                      ) : null}
+                    </div>
                   </td>
                   <td className="px-3 py-3 text-right tabular-nums">{shares(holding.shares)}</td>
                   <td className="px-3 py-3 text-right tabular-nums">{price(holding.avgCost)}</td>
@@ -108,18 +151,30 @@ export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
                   <tr key={`${holding.ticker}-lots`} className="border-b border-line bg-panel-2/50">
                     <td colSpan={8} className="px-4 py-4">
                       <div className="mb-3 flex items-center justify-between">
-                        <p className="text-xs uppercase tracking-[0.18em] text-muted">Open lots</p>
-                        <Link href={`/activity?ticker=${holding.ticker}`} className="text-xs text-gold hover:underline">
-                          All {holding.ticker} filings
+                        <p className="text-xs uppercase tracking-[0.18em] text-muted">{copy.openLots}</p>
+                        <Link href={`${base}/activity?ticker=${holding.ticker}`} className="text-xs text-gold hover:underline">
+                          {copy.allFilings(holding.ticker)}
                         </Link>
                       </div>
                       <div className="grid gap-2">
-                        {holding.lots.map((lot) => (
+                        {[...holding.lots]
+                          .sort((a, b) => b.date.localeCompare(a.date) || b.tradeId.localeCompare(a.tradeId))
+                          .map((lot) => (
                           <div key={lot.tradeId + lot.date + lot.shares} className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-                            <span className="text-muted">{prettyDate(lot.date)}</span>
-                            <span className="tabular-nums">{shares(lot.shares)} sh @ {price(lot.price)}</span>
-                            <span className="tabular-nums text-muted">{money(lot.cost)} cost</span>
-                            <span className="text-muted sm:text-right">{lot.note}</span>
+                            <span className="text-muted">{prettyDate(lot.date, locale)}</span>
+                            <span className="tabular-nums">{shares(lot.shares)} {copy.sharesShort} @ {price(lot.price)}</span>
+                            <span className="tabular-nums text-muted">{money(lot.cost)} {copy.cost}</span>
+                            <span className="text-muted sm:text-right">
+                              {translateNote(lot.note, locale)}
+                              {lot.pdfUrl ? (
+                                <>
+                                  {" · "}
+                                  <a href={lot.pdfUrl} target="_blank" rel="noreferrer" className="text-gold hover:underline">
+                                    {copy.filingLink}
+                                  </a>
+                                </>
+                              ) : null}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -131,6 +186,7 @@ export function HoldingsTable({ holdings }: { holdings: Holding[] }) {
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
