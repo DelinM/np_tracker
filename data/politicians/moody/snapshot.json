@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T06:23:13+00:00",
+  "generatedAt": "2026-10-08T20:40:24+00:00",
   "asOf": "Oct 8, 2026",
   "member": {
     "name": "Ashley Moody",
@@ -14,15 +14,15 @@
     "url": "https://efdsearch.senate.gov/search/"
   },
   "summary": {
-    "marketValue": 4425544.65,
+    "marketValue": 4268988.52,
     "costBasis": 1513007.0,
-    "unrealized": 2912537.65,
-    "unrealizedPct": 1.9249994514743687,
+    "unrealized": 2755981.52,
+    "unrealizedPct": 1.8215259530635128,
     "realized": 1686.93,
-    "totalPnl": 2914224.58,
-    "totalPnlPct": 1.8351453498915038,
-    "dayChange": -465.63,
-    "dayChangePct": -0.00010520309964529152,
+    "totalPnl": 2757668.45,
+    "totalPnlPct": 1.736558833511629,
+    "dayChange": -108023.24,
+    "dayChangePct": -0.024679677821469563,
     "positions": 11,
     "trades": 57,
     "filings": 4,
@@ -2613,9 +2613,9 @@
     },
     {
       "date": "2026-10-07",
-      "value": 4428773.37,
+      "value": 4425671.35,
       "cost": 1513007.0,
-      "pnl": 2917453.31
+      "pnl": 2914351.29
     }
   ],
   "holdings": [
@@ -2626,13 +2626,13 @@
       "shares": 2804.913,
       "avgCost": 187.1721,
       "costBasis": 525001.5,
-      "price": 520.65,
-      "prevClose": 530.27,
-      "marketValue": 1460377.96,
-      "unrealized": 935376.46,
-      "unrealizedPct": 1.781664351579859,
-      "dayChange": -26983.26,
-      "dayChangePct": -0.018141701397401334,
+      "price": 505.43,
+      "prevClose": 520.65,
+      "marketValue": 1417687.18,
+      "unrealized": 892685.68,
+      "unrealizedPct": 1.7003488201651942,
+      "dayChange": -42690.78,
+      "dayChangePct": -0.029232689906847156,
       "owners": [
         "self"
       ],
@@ -2670,7 +2670,7 @@
       ],
       "latestBuy": "2025-01-27",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/5e2160d6-9770-4c7b-b65e-9b7794043d25/",
-      "weight": 0.3299883013550822
+      "weight": 0.3320897149601243
     },
     {
       "ticker": "AMD",
@@ -2679,13 +2679,13 @@
       "shares": 1618.7263,
       "avgCost": 108.11,
       "costBasis": 175000.5,
-      "price": 645.86,
-      "prevClose": 649.42,
-      "marketValue": 1045470.57,
-      "unrealized": 870470.07,
-      "unrealizedPct": 4.974100453242069,
-      "dayChange": -5762.67,
-      "dayChangePct": -0.005481814542206809,
+      "price": 615.475,
+      "prevClose": 645.86,
+      "marketValue": 996285.57,
+      "unrealized": 821285.07,
+      "unrealizedPct": 4.69304412172787,
+      "dayChange": -49185.0,
+      "dayChangePct": -0.0470457993992506,
       "owners": [
         "self"
       ],
@@ -2703,7 +2703,7 @@
       ],
       "latestBuy": "2025-02-24",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/376521e5-ad5e-44ec-8bd4-63847da2e049/",
-      "weight": 0.23623545887465294
+      "weight": 0.23337743024535565
     },
     {
       "ticker": "MU",
@@ -2712,13 +2712,13 @@
       "shares": 686.6291,
       "avgCost": 109.23,
       "costBasis": 75000.5,
-      "price": 1088.0,
-      "prevClose": 1045.56,
-      "marketValue": 747052.49,
-      "unrealized": 672051.99,
-      "unrealizedPct": 8.960633525588209,
-      "dayChange": 29140.54,
-      "dayChangePct": 0.0405906882436207,
+      "price": 1035.412,
+      "prevClose": 1035.84,
+      "marketValue": 710944.04,
+      "unrealized": 635943.54,
+      "unrealizedPct": 8.479190698526045,
+      "dayChange": -293.88,
+      "dayChangePct": -0.0004131912264441261,
       "owners": [
         "self"
       ],
@@ -2736,7 +2736,7 @@
       ],
       "latestBuy": "2025-01-22",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/5e2160d6-9770-4c7b-b65e-9b7794043d25/",
-      "weight": 0.16880464437999637
+      "weight": 0.16653688269664624
     },
     {
       "ticker": "NVDA",
@@ -2745,13 +2745,13 @@
       "shares": 1752.5537,
       "avgCost": 118.3992,
       "costBasis": 207501.0,
-      "price": 237.3977,
-      "prevClose": 239.24,
-      "marketValue": 416052.21,
-      "unrealized": 208551.21,
-      "unrealizedPct": 1.0050612438697133,
-      "dayChange": -3228.73,
-      "dayChangePct": -0.007700635345260085,
+      "price": 230.51,
+      "prevClose": 237.47,
+      "marketValue": 403981.15,
+      "unrealized": 196480.15,
+      "unrealizedPct": 0.9468877218456944,
+      "dayChange": -12197.77,
+      "dayChangePct": -0.02930896534299073,
       "owners": [
         "self"
       ],
@@ -2779,7 +2779,7 @@
       ],
       "latestBuy": "2025-03-21",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/19100e4c-0acb-45fb-9eb3-34ec9460d5e9/",
-      "weight": 0.0940115270247765
+      "weight": 0.0946315850530321
     },
     {
       "ticker": "LLY",
@@ -2788,13 +2788,13 @@
       "shares": 191.7267,
       "avgCost": 912.76,
       "costBasis": 175000.5,
-      "price": 1188.72,
-      "prevClose": 1157.49,
-      "marketValue": 227909.41,
-      "unrealized": 52908.91,
-      "unrealizedPct": 0.30233577282089497,
-      "dayChange": 5987.63,
-      "dayChangePct": 0.026980794650493755,
+      "price": 1165.0,
+      "prevClose": 1169.93,
+      "marketValue": 223361.65,
+      "unrealized": 48361.15,
+      "unrealizedPct": 0.27634865682107024,
+      "dayChange": -945.21,
+      "dayChangePct": -0.004213927328985549,
       "owners": [
         "self"
       ],
@@ -2812,7 +2812,7 @@
       ],
       "latestBuy": "2025-03-06",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/376521e5-ad5e-44ec-8bd4-63847da2e049/",
-      "weight": 0.05149861277606449
+      "weight": 0.05232191397930469
     },
     {
       "ticker": "SMCI",
@@ -2821,13 +2821,13 @@
       "shares": 4306.1147,
       "avgCost": 40.64,
       "costBasis": 175000.5,
-      "price": 44.94,
+      "price": 42.77,
       "prevClose": 43.46,
-      "marketValue": 193516.79,
-      "unrealized": 18516.29,
-      "unrealizedPct": 0.10580708661417312,
-      "dayChange": 6373.05,
-      "dayChangePct": 0.03405430280717894,
+      "marketValue": 184172.52,
+      "unrealized": 9172.02,
+      "unrealizedPct": 0.05241141732283462,
+      "dayChange": -2971.22,
+      "dayChangePct": -0.015876668200644217,
       "owners": [
         "self"
       ],
@@ -2845,7 +2845,7 @@
       ],
       "latestBuy": "2025-03-25",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/19100e4c-0acb-45fb-9eb3-34ec9460d5e9/",
-      "weight": 0.04372722580378313
+      "weight": 0.04314195721956644
     },
     {
       "ticker": "ASML",
@@ -2854,13 +2854,13 @@
       "shares": 101.9084,
       "avgCost": 735.96,
       "costBasis": 75000.5,
-      "price": 1804.96,
-      "prevClose": 1834.1,
-      "marketValue": 183940.57,
-      "unrealized": 108940.07,
-      "unrealizedPct": 1.4525245937279196,
-      "dayChange": -2969.61,
-      "dayChangePct": -0.015887901423041206,
+      "price": 1770.0,
+      "prevClose": 1769.79,
+      "marketValue": 180377.85,
+      "unrealized": 105377.35,
+      "unrealizedPct": 1.405022012065873,
+      "dayChange": 21.4,
+      "dayChangePct": 0.00011865814588173534,
       "owners": [
         "self"
       ],
@@ -2878,7 +2878,7 @@
       ],
       "latestBuy": "2025-02-24",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/376521e5-ad5e-44ec-8bd4-63847da2e049/",
-      "weight": 0.04156337462432369
+      "weight": 0.04225306515900077
     },
     {
       "ticker": "HWM",
@@ -2887,13 +2887,13 @@
       "shares": 289.3305,
       "avgCost": 112.33,
       "costBasis": 32500.5,
-      "price": 222.75,
-      "prevClose": 231.6,
-      "marketValue": 64448.38,
-      "unrealized": 31947.88,
-      "unrealizedPct": 0.9829965280868869,
-      "dayChange": -2560.58,
-      "dayChangePct": -0.0382124352331606,
+      "price": 222.56,
+      "prevClose": 222.59,
+      "marketValue": 64393.41,
+      "unrealized": 31892.91,
+      "unrealizedPct": 0.9813050832368914,
+      "dayChange": -8.68,
+      "dayChangePct": -0.00013477694415742458,
       "owners": [
         "self"
       ],
@@ -2911,7 +2911,7 @@
       ],
       "latestBuy": "2025-04-04",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/bc4381fc-d714-45da-be6f-1fa87f2212ba/",
-      "weight": 0.014562813205758633
+      "weight": 0.015083997001517937
     },
     {
       "ticker": "JPM",
@@ -2920,13 +2920,13 @@
       "shares": 154.5582,
       "avgCost": 210.28,
       "costBasis": 32500.5,
-      "price": 329.58,
-      "prevClose": 331.28,
-      "marketValue": 50939.29,
-      "unrealized": 18438.79,
-      "unrealizedPct": 0.5673387863800646,
-      "dayChange": -262.75,
-      "dayChangePct": -0.005131610722047781,
+      "price": 331.41,
+      "prevClose": 331.45,
+      "marketValue": 51222.14,
+      "unrealized": 18721.64,
+      "unrealizedPct": 0.5760414685181663,
+      "dayChange": -6.18,
+      "dayChangePct": -0.0001206818524663256,
       "owners": [
         "self"
       ],
@@ -2944,7 +2944,7 @@
       ],
       "latestBuy": "2025-04-04",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/bc4381fc-d714-45da-be6f-1fa87f2212ba/",
-      "weight": 0.011510287226831284
+      "weight": 0.011998659585993844
     },
     {
       "ticker": "ARCC",
@@ -2953,13 +2953,13 @@
       "shares": 1627.4662,
       "avgCost": 19.97,
       "costBasis": 32500.5,
-      "price": 18.45,
-      "prevClose": 18.64,
-      "marketValue": 30026.75,
-      "unrealized": -2473.75,
-      "unrealizedPct": -0.07611417125688526,
-      "dayChange": -309.22,
-      "dayChangePct": -0.01019313304721037,
+      "price": 18.73,
+      "prevClose": 18.74,
+      "marketValue": 30482.44,
+      "unrealized": -2018.06,
+      "unrealizedPct": -0.062093139709564225,
+      "dayChange": -16.27,
+      "dayChangePct": -0.0005336179295623272,
       "owners": [
         "self"
       ],
@@ -2977,7 +2977,7 @@
       ],
       "latestBuy": "2025-04-04",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/bc4381fc-d714-45da-be6f-1fa87f2212ba/",
-      "weight": 0.006784871108102533
+      "weight": 0.00714043616511302
     },
     {
       "ticker": "GENI",
@@ -2986,13 +2986,13 @@
       "shares": 916.4376,
       "avgCost": 8.73,
       "costBasis": 8000.5,
-      "price": 6.34,
-      "prevClose": 6.22,
-      "marketValue": 5810.21,
-      "unrealized": -2190.29,
-      "unrealizedPct": -0.2737686139747996,
-      "dayChange": 109.97,
-      "dayChangePct": 0.019292604501607736,
+      "price": 6.635,
+      "prevClose": 6.34,
+      "marketValue": 6080.56,
+      "unrealized": -1919.94,
+      "unrealizedPct": -0.23997709049255453,
+      "dayChange": 270.35,
+      "dayChangePct": 0.04652996845425866,
       "owners": [
         "self"
       ],
@@ -3010,7 +3010,7 @@
       ],
       "latestBuy": "2025-02-24",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/376521e5-ad5e-44ec-8bd4-63847da2e049/",
-      "weight": 0.0013128802138429373
+      "weight": 0.0014243561384239458
     }
   ],
   "realized": [

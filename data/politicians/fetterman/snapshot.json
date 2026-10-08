@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T06:23:42+00:00",
+  "generatedAt": "2026-10-08T20:40:39+00:00",
   "asOf": "Oct 8, 2026",
   "member": {
     "name": "John Fetterman",
@@ -14,15 +14,15 @@
     "url": "https://efdsearch.senate.gov/search/"
   },
   "summary": {
-    "marketValue": 101621.4,
+    "marketValue": 100801.83,
     "costBasis": 64004.0,
-    "unrealized": 37617.4,
-    "unrealizedPct": 0.587735090400831,
+    "unrealized": 36797.83,
+    "unrealizedPct": 0.5749301626378733,
     "realized": 0.0,
-    "totalPnl": 37617.4,
-    "totalPnlPct": 0.587735090400831,
-    "dayChange": 379.71,
-    "dayChangePct": 0.0037505301647886395,
+    "totalPnl": 36797.83,
+    "totalPnlPct": 0.5749301626378733,
+    "dayChange": -796.57,
+    "dayChangePct": -0.007840379366061582,
     "positions": 5,
     "trades": 97,
     "filings": 23,
@@ -5607,45 +5607,12 @@
     },
     {
       "date": "2026-10-07",
-      "value": 101939.97,
+      "value": 102320.95,
       "cost": 64004.0,
-      "pnl": 37935.97
+      "pnl": 38316.95
     }
   ],
   "holdings": [
-    {
-      "ticker": "MU",
-      "symbol": "MU",
-      "name": "Micron Technology, Inc.",
-      "shares": 24.8617,
-      "avgCost": 321.8,
-      "costBasis": 8000.5,
-      "price": 1088.0,
-      "prevClose": 1045.56,
-      "marketValue": 27049.55,
-      "unrealized": 19049.05,
-      "unrealizedPct": 2.3809819763828464,
-      "dayChange": 1055.13,
-      "dayChangePct": 0.0405906882436207,
-      "owners": [
-        "dependent"
-      ],
-      "lots": [
-        {
-          "date": "2026-03-30",
-          "shares": 24.8617,
-          "price": 321.8,
-          "cost": 8000.5,
-          "owner": "dependent",
-          "note": "Share count estimated from the disclosed dollar range",
-          "tradeId": "8d93e30a-19a8-43a9-93d8-e95d629b1039-5",
-          "pdfUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/"
-        }
-      ],
-      "latestBuy": "2026-03-30",
-      "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/",
-      "weight": 0.2661796715206473
-    },
     {
       "ticker": "GOOG",
       "symbol": "GOOG",
@@ -5653,13 +5620,13 @@
       "shares": 77.6615,
       "avgCost": 206.0353,
       "costBasis": 16001.0,
-      "price": 342.305,
-      "prevClose": 344.59,
-      "marketValue": 26583.9,
-      "unrealized": 10582.9,
-      "unrealizedPct": 0.6613902183651472,
-      "dayChange": -177.46,
-      "dayChangePct": -0.006631068806407523,
+      "price": 344.35,
+      "prevClose": 347.37,
+      "marketValue": 26742.72,
+      "unrealized": 10741.72,
+      "unrealizedPct": 0.6713157029375513,
+      "dayChange": -234.54,
+      "dayChangePct": -0.008693899876212632,
       "owners": [
         "dependent"
       ],
@@ -5687,7 +5654,40 @@
       ],
       "latestBuy": "2026-03-30",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/",
-      "weight": 0.2615974672309793
+      "weight": 0.26529994510665567
+    },
+    {
+      "ticker": "MU",
+      "symbol": "MU",
+      "name": "Micron Technology, Inc.",
+      "shares": 24.8617,
+      "avgCost": 321.8,
+      "costBasis": 8000.5,
+      "price": 1035.412,
+      "prevClose": 1035.84,
+      "marketValue": 25742.12,
+      "unrealized": 17741.62,
+      "unrealizedPct": 2.217563704164077,
+      "dayChange": -10.64,
+      "dayChangePct": -0.0004131912264441261,
+      "owners": [
+        "dependent"
+      ],
+      "lots": [
+        {
+          "date": "2026-03-30",
+          "shares": 24.8617,
+          "price": 321.8,
+          "cost": 8000.5,
+          "owner": "dependent",
+          "note": "Share count estimated from the disclosed dollar range",
+          "tradeId": "8d93e30a-19a8-43a9-93d8-e95d629b1039-5",
+          "pdfUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/"
+        }
+      ],
+      "latestBuy": "2026-03-30",
+      "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/",
+      "weight": 0.25537353802937557
     },
     {
       "ticker": "MSFT",
@@ -5696,13 +5696,13 @@
       "shares": 44.7128,
       "avgCost": 357.8616,
       "costBasis": 16001.0,
-      "price": 526.38,
-      "prevClose": 529.3,
-      "marketValue": 23535.93,
-      "unrealized": 7534.93,
-      "unrealizedPct": 0.4709036319721222,
-      "dayChange": -130.56,
-      "dayChangePct": -0.005516720196485848,
+      "price": 522.385,
+      "prevClose": 529.76,
+      "marketValue": 23357.3,
+      "unrealized": 7356.3,
+      "unrealizedPct": 0.4597400999045499,
+      "dayChange": -329.76,
+      "dayChangePct": -0.013921398369072788,
       "owners": [
         "dependent"
       ],
@@ -5730,7 +5730,7 @@
       ],
       "latestBuy": "2026-03-30",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/",
-      "weight": 0.2316040790450469
+      "weight": 0.23171503900275245
     },
     {
       "ticker": "ERIE",
@@ -5739,13 +5739,13 @@
       "shares": 65.4764,
       "avgCost": 244.3782,
       "costBasis": 16001.0,
-      "price": 217.77,
-      "prevClose": 223.22,
-      "marketValue": 14258.79,
-      "unrealized": -1742.21,
-      "unrealizedPct": -0.10888105318812069,
-      "dayChange": -356.85,
-      "dayChangePct": -0.02441537496640081,
+      "price": 226.1,
+      "prevClose": 226.54,
+      "marketValue": 14804.21,
+      "unrealized": -1196.79,
+      "unrealizedPct": -0.07479453609695595,
+      "dayChange": -28.81,
+      "dayChangePct": -0.00194226185221152,
       "owners": [
         "dependent"
       ],
@@ -5773,7 +5773,7 @@
       ],
       "latestBuy": "2026-03-30",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/",
-      "weight": 0.14031287169220527
+      "weight": 0.1468644962198087
     },
     {
       "ticker": "AMZN",
@@ -5782,13 +5782,13 @@
       "shares": 39.8134,
       "avgCost": 200.95,
       "costBasis": 8000.5,
-      "price": 256.025,
-      "prevClose": 256.29,
-      "marketValue": 10193.22,
-      "unrealized": 2192.72,
-      "unrealizedPct": 0.27407315252550374,
-      "dayChange": -10.55,
-      "dayChangePct": -0.0010339849389365296,
+      "price": 255.0769,
+      "prevClose": 259.92,
+      "marketValue": 10155.48,
+      "unrealized": 2154.98,
+      "unrealizedPct": 0.26935506344861926,
+      "dayChange": -192.82,
+      "dayChangePct": -0.018633040935672595,
       "owners": [
         "dependent"
       ],
@@ -5806,7 +5806,7 @@
       ],
       "latestBuy": "2026-03-30",
       "sourceUrl": "https://efdsearch.senate.gov/search/view/ptr/8d93e30a-19a8-43a9-93d8-e95d629b1039/",
-      "weight": 0.1003058443241271
+      "weight": 0.10074698035696217
     }
   ],
   "realized": [],
