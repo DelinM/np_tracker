@@ -83,7 +83,7 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
           ))}
         </div>
       </div>
-      <div className="h-72 w-full">
+      <div className="h-56 w-full sm:h-72">
         {data.length > 1 ? (
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
@@ -112,7 +112,7 @@ export function PortfolioChart({ history }: { history: HistoryPoint[] }) {
               />
               <YAxis
                 tickFormatter={axisMoney}
-                width={64}
+                width={52}
                 tick={{ fill: "#9c978d", fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}

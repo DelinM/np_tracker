@@ -21,6 +21,7 @@ html {
 
 body {
   min-height: 100vh;
+  overflow-x: clip;
   color: var(--color-cream);
   background:
     radial-gradient(920px 480px at 0% -12%, rgba(212, 180, 131, 0.16), transparent 58%),

@@ -27,7 +27,7 @@ export function Dashboard({ snapshot, base }: { snapshot: Snapshot; base: string
     <div className="space-y-10">
       <section>
         <p className="text-sm text-muted">{copy.marketValue}</p>
-        <p className="mt-2 font-serif text-5xl tracking-tight tabular-nums sm:text-7xl">
+        <p className="mt-2 break-words font-serif text-4xl tracking-tight tabular-nums sm:text-7xl">
           {money(summary.marketValue)}
         </p>
         <p className={`mt-3 text-lg tabular-nums ${tone(summary.dayChange)}`}>

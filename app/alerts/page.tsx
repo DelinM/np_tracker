@@ -72,7 +72,7 @@ export default function AlertsPage() {
             required
           />
         </label>
-        <button type="submit" className="rounded-full bg-cream px-4 py-2 text-sm text-ink">
+        <button type="submit" className="w-full rounded-full bg-cream px-4 py-2.5 text-sm text-ink sm:w-auto">
           {copy.openBot}
         </button>
       </form>

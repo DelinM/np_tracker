@@ -65,7 +65,30 @@ export function ActivityTable({ trades, initialQuery }: { trades: Trade[]; initi
           </button>
         ))}
       </div>
-      <div className="overflow-x-auto rounded-3xl border border-line bg-panel/80">
+      <div className="space-y-3 md:hidden">
+        {rows.map((trade) => (
+          <article key={trade.id} className="rounded-3xl border border-line bg-panel/80 p-4 text-sm">
+            <div className="flex items-baseline justify-between gap-3">
+              <p>{prettyDate(trade.transactionDate, locale)}</p>
+              <p className="font-mono">{trade.ticker ?? "—"}</p>
+            </div>
+            <p className="mt-1 text-gold">
+              {copy.actions[trade.action]}
+              <span className="text-muted"> · {copy.owners[trade.owner]}</span>
+            </p>
+            <p className="mt-1 truncate text-xs text-muted">{trade.name}</p>
+            <p className="mt-2 tabular-nums text-muted">
+              {trade.shares == null ? "—" : `${shares(trade.shares)} ${copy.sharesShort}`}
+              {trade.amountLabel ? ` · ${trade.amountLabel}` : ""}
+            </p>
+            <a href={trade.pdfUrl} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs text-gold hover:underline">
+              {copy.filing}
+            </a>
+          </article>
+        ))}
+        {!rows.length ? <p className="text-sm text-muted">{copy.noMatches}</p> : null}
+      </div>
+      <div className="hidden overflow-x-auto rounded-3xl border border-line bg-panel/80 md:block">
         <table className="w-full min-w-[860px] text-sm">
           <thead className="text-xs uppercase tracking-wide text-muted">
             <tr className="border-b border-line">

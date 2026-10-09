@@ -75,7 +75,53 @@ export function HoldingsTable({ holdings, base }: { holdings: Holding[]; base: s
           {copy.sortPurchase}
         </button>
       </div>
-      <div className="overflow-x-auto rounded-3xl border border-line bg-panel/80">
+      <div className="space-y-3 md:hidden">
+        {rows.map((holding) => {
+          const expanded = open === holding.ticker;
+          return (
+            <div key={holding.ticker} className="rounded-3xl border border-line bg-panel/80 p-4">
+              <button type="button" onClick={() => setOpen(expanded ? null : holding.ticker)} className="w-full text-left">
+                <span className="flex items-baseline justify-between gap-3">
+                  <span className="font-mono text-sm text-cream">{holding.ticker}</span>
+                  <span className="tabular-nums">{holding.marketValue == null ? "—" : money(holding.marketValue)}</span>
+                </span>
+                <span className="mt-1 block truncate text-xs text-muted">{holding.name}</span>
+                <span className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <span>
+                    <span className="block text-[10px] uppercase tracking-[0.14em] text-gold">{copy.day}</span>
+                    <span className={tone(holding.dayChange)}>{holding.dayChange == null ? "—" : signedMoney(holding.dayChange)}</span>
+                  </span>
+                  <span>
+                    <span className="block text-[10px] uppercase tracking-[0.14em] text-gold">{copy.return}</span>
+                    <span className={tone(holding.unrealized)}>{signedPct(holding.unrealizedPct)}</span>
+                  </span>
+                </span>
+              </button>
+              {expanded ? (
+                <div className="mt-3 border-t border-line pt-3">
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <p className="text-xs uppercase tracking-[0.18em] text-muted">{copy.openLots}</p>
+                    <Link href={`${base}/activity?ticker=${holding.ticker}`} className="text-xs text-gold hover:underline">
+                      {copy.allFilings(holding.ticker)}
+                    </Link>
+                  </div>
+                  <div className="grid gap-2">
+                    {[...holding.lots]
+                      .sort((a, b) => b.date.localeCompare(a.date) || b.tradeId.localeCompare(a.tradeId))
+                      .map((lot) => (
+                        <div key={lot.tradeId + lot.date + lot.shares} className="text-sm">
+                          <p className="text-muted">{prettyDate(lot.date, locale)}</p>
+                          <p className="tabular-nums">{shares(lot.shares)} {copy.sharesShort} @ {price(lot.price)}</p>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+      <div className="hidden overflow-x-auto rounded-3xl border border-line bg-panel/80 md:block">
       <table className="w-full min-w-[920px] text-sm">
         <thead className="text-xs uppercase tracking-wide text-muted">
           <tr className="border-b border-line">

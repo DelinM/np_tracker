@@ -35,8 +35,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const office = politician?.chamber === "senate" ? copy.senate : politician?.chamber === "executive" ? copy.president : copy.house;
 
   return (
-    <div className="mx-auto min-h-screen max-w-6xl px-5 pb-16 pt-6 sm:px-8">
-      <header className="flex flex-wrap items-end justify-between gap-6 border-b border-line pb-5">
+    <div className="mx-auto min-h-screen max-w-6xl px-4 pb-16 pt-5 sm:px-8 sm:pt-6">
+      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5 sm:gap-6">
         <div className="flex items-end gap-4">
           {politician ? (
             <img
@@ -46,10 +46,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
             />
           ) : null}
           <div>
-          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-gold">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-gold sm:tracking-[0.28em]">
             {politician ? copy.brand : copy.directoryEyebrow}
           </p>
-          <h1 className="mt-1 font-serif text-3xl tracking-tight text-cream sm:text-4xl">
+          <h1 className="mt-1 font-serif text-2xl leading-tight tracking-tight text-cream sm:text-4xl">
             {politician ? (locale === "zh" ? politician.nameZh : politician.name) : onAlerts ? copy.alertsTitle : copy.directoryTitle}
           </h1>
           {politician ? (
@@ -97,7 +97,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </nav>
         </div>
       </header>
-      <main className="pt-8">{children}</main>
+      <main className="min-w-0 pt-8">{children}</main>
       <footer className="mt-16 max-w-3xl text-xs leading-5 text-muted">
         {copy.footerLead}{" "}
         <a className="text-gold underline-offset-2 hover:underline" href={source.url}>
