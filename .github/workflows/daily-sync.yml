@@ -2,14 +2,12 @@ name: Disclosure sync
 
 on:
   schedule:
-    # 9:00, 12:00, and 15:30 America/New_York, covering both EST and EDT.
+    # Weekdays at 7:00 and 12:00 America/New_York, covering both EST and EDT.
     # The sync skips a run that is not actually one of those local times.
-    - cron: "0 13 * * *"
-    - cron: "0 14 * * *"
-    - cron: "0 16 * * *"
-    - cron: "0 17 * * *"
-    - cron: "30 19 * * *"
-    - cron: "30 20 * * *"
+    - cron: "0 11 * * 1-5"
+    - cron: "0 12 * * 1-5"
+    - cron: "0 16 * * 1-5"
+    - cron: "0 17 * * 1-5"
   workflow_dispatch:
 
 permissions:

@@ -6,7 +6,7 @@ import { money, prettyDate, signedMoney, signedPct, tone } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 import type { MemberCard } from "@/lib/politicians";
 
-type SortKey = "value" | "yearly" | "office";
+type SortKey = "value" | "yearly" | "office" | "filing";
 type View = "cards" | "table";
 
 function officeLine(member: MemberCard, copy: { house: string; senate: string; president: string }) {
@@ -42,7 +42,10 @@ export function Directory({ cards }: { cards: MemberCard[] }) {
     const valueOf = (card: MemberCard) => {
       if (sort === "value") return card.marketValue;
       if (sort === "yearly") return card.yearlyProfitPct;
-      return card.yearsInOffice;
+      if (sort === "office") return card.yearsInOffice;
+      if (!card.lastFiling) return null;
+      const filed = Date.parse(`${card.lastFiling}T12:00:00Z`);
+      return Number.isNaN(filed) ? null : filed;
     };
     return [...visible].sort((a, b) => {
       const left = valueOf(a);
@@ -59,6 +62,7 @@ export function Directory({ cards }: { cards: MemberCard[] }) {
     { id: "value", label: copy.sortMarket },
     { id: "yearly", label: copy.sortYearly },
     { id: "office", label: copy.sortOffice },
+    { id: "filing", label: copy.latestFiling },
   ];
   const views: Array<{ id: View; label: string }> = [
     { id: "cards", label: copy.viewCards },
