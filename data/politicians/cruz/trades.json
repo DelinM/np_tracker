@@ -1,0 +1,35 @@
+{
+  "parserVersion": 3,
+  "generatedAt": "2026-10-09T11:43:51+00:00",
+  "member": "cruz",
+  "filings": [
+    {
+      "docId": "7538C9A1-FEA2-4C57-A02C-E812D20A8B4C",
+      "year": 2013,
+      "filingDate": "2013-05-07",
+      "stateDst": "TX",
+      "pdfUrl": "https://efdsearch.senate.gov/search/view/paper/7538C9A1-FEA2-4C57-A02C-E812D20A8B4C/",
+      "status": "empty",
+      "tradeCount": 0
+    },
+    {
+      "docId": "DB81B167-A836-4E58-BFCF-D820646DBB75",
+      "year": 2013,
+      "filingDate": "2013-03-25",
+      "stateDst": "TX",
+      "pdfUrl": "https://efdsearch.senate.gov/search/view/paper/DB81B167-A836-4E58-BFCF-D820646DBB75/",
+      "status": "empty",
+      "tradeCount": 0
+    },
+    {
+      "docId": "DEB07EEC-B676-44DE-B869-482DF10AEC4A",
+      "year": 2013,
+      "filingDate": "2013-02-25",
+      "stateDst": "TX",
+      "pdfUrl": "https://efdsearch.senate.gov/search/view/paper/DEB07EEC-B676-44DE-B869-482DF10AEC4A/",
+      "status": "empty",
+      "tradeCount": 0
+    }
+  ],
+  "trades": []
+}

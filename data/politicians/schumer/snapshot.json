@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-10-09T11:43:40+00:00",
+  "asOf": "Oct 9, 2026",
+  "member": {
+    "name": "Chuck Schumer",
+    "nameZh": "\u67e5\u514b\u00b7\u8212\u9ed8",
+    "slug": "schumer",
+    "district": "NY",
+    "chamber": "U.S. Senate",
+    "party": "D"
+  },
+  "source": {
+    "name": "U.S. Senate Financial Disclosures",
+    "url": "https://efdsearch.senate.gov/search/"
+  },
+  "summary": {
+    "marketValue": 0.0,
+    "costBasis": 0.0,
+    "unrealized": 0.0,
+    "unrealizedPct": null,
+    "realized": 0.0,
+    "totalPnl": 0.0,
+    "totalPnlPct": null,
+    "dayChange": 0.0,
+    "dayChangePct": null,
+    "positions": 0,
+    "trades": 0,
+    "filings": 0,
+    "firstTrade": null,
+    "lastFiling": null,
+    "deployed": 0.0
+  },
+  "history": [],
+  "holdings": [],
+  "realized": [],
+  "options": [],
+  "other": [],
+  "trades": [],
+  "filings": [],
+  "warnings": []
+}

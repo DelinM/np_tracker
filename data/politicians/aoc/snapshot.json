@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-10-09T11:43:56+00:00",
+  "asOf": "Oct 9, 2026",
+  "member": {
+    "name": "Alexandria Ocasio-Cortez",
+    "nameZh": "\u4e9a\u5386\u5c71\u5fb7\u91cc\u5a05\u00b7\u5965\u5361\u897f\u5965-\u79d1\u5c14\u7279\u65af",
+    "slug": "aoc",
+    "district": "NY-14",
+    "chamber": "U.S. House",
+    "party": "D"
+  },
+  "source": {
+    "name": "Clerk of the House of Representatives",
+    "url": "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/"
+  },
+  "summary": {
+    "marketValue": 0.0,
+    "costBasis": 0.0,
+    "unrealized": 0.0,
+    "unrealizedPct": null,
+    "realized": 0.0,
+    "totalPnl": 0.0,
+    "totalPnlPct": null,
+    "dayChange": 0.0,
+    "dayChangePct": null,
+    "positions": 0,
+    "trades": 0,
+    "filings": 0,
+    "firstTrade": null,
+    "lastFiling": null,
+    "deployed": 0.0
+  },
+  "history": [],
+  "holdings": [],
+  "realized": [],
+  "options": [],
+  "other": [],
+  "trades": [],
+  "filings": [],
+  "warnings": []
+}

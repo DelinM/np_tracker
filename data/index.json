@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T09:35:13+00:00",
+  "generatedAt": "2026-10-09T11:44:35+00:00",
   "members": [
     {
       "slug": "pelosi",
@@ -60,6 +60,206 @@
       "positions": 83,
       "lastFiling": "2026-09-25",
       "generatedAt": "2026-10-09T09:35:13+00:00"
+    },
+    {
+      "slug": "gottheimer",
+      "name": "Josh Gottheimer",
+      "marketValue": 3465529.81,
+      "dayChange": 24602.26,
+      "dayChangePct": 0.007149891894764812,
+      "positions": 185,
+      "lastFiling": "2026-09-14",
+      "generatedAt": "2026-10-09T10:23:40+00:00"
+    },
+    {
+      "slug": "delbene",
+      "name": "Suzan DelBene",
+      "marketValue": 24592340.38,
+      "dayChange": 264187.85,
+      "dayChangePct": 0.010859346993441248,
+      "positions": 2,
+      "lastFiling": "2026-09-30",
+      "generatedAt": "2026-10-09T10:29:48+00:00"
+    },
+    {
+      "slug": "peters",
+      "name": "Scott Peters",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": "2026-09-21",
+      "generatedAt": "2026-10-09T10:34:28+00:00"
+    },
+    {
+      "slug": "rogers",
+      "name": "Harold Rogers",
+      "marketValue": 404872.65,
+      "dayChange": 442.49,
+      "dayChangePct": 0.001094107323791874,
+      "positions": 10,
+      "lastFiling": "2026-09-23",
+      "generatedAt": "2026-10-09T10:41:11+00:00"
+    },
+    {
+      "slug": "allen",
+      "name": "Rick Allen",
+      "marketValue": 3095346.84,
+      "dayChange": 13382.27,
+      "dayChangePct": 0.0043421232440169,
+      "positions": 37,
+      "lastFiling": "2026-09-22",
+      "generatedAt": "2026-10-09T10:43:23+00:00"
+    },
+    {
+      "slug": "hern",
+      "name": "Kevin Hern",
+      "marketValue": 15528108.4,
+      "dayChange": 72422.21,
+      "dayChangePct": 0.004685797130768039,
+      "positions": 46,
+      "lastFiling": "2026-09-25",
+      "generatedAt": "2026-10-09T10:50:58+00:00"
+    },
+    {
+      "slug": "kelly",
+      "name": "Mike Kelly",
+      "marketValue": 900532.86,
+      "dayChange": 4196.05,
+      "dayChangePct": 0.004681331772655585,
+      "positions": 6,
+      "lastFiling": "2026-09-08",
+      "generatedAt": "2026-10-09T10:57:29+00:00"
+    },
+    {
+      "slug": "foxx",
+      "name": "Virginia Foxx",
+      "marketValue": 2621872.88,
+      "dayChange": 8828.13,
+      "dayChangePct": 0.003378484050723485,
+      "positions": 48,
+      "lastFiling": "2026-07-10",
+      "generatedAt": "2026-10-09T11:09:42+00:00"
+    },
+    {
+      "slug": "greene",
+      "name": "Marjorie Taylor Greene",
+      "marketValue": 7111319.88,
+      "dayChange": 63291.35,
+      "dayChangePct": 0.008980007628933641,
+      "positions": 100,
+      "lastFiling": "2025-12-16",
+      "generatedAt": "2026-10-09T11:12:33+00:00"
+    },
+    {
+      "slug": "doggett",
+      "name": "Lloyd Doggett",
+      "marketValue": 2149801.97,
+      "dayChange": 12172.49,
+      "dayChangePct": 0.005694387225974635,
+      "positions": 6,
+      "lastFiling": "2026-10-05",
+      "generatedAt": "2026-10-09T11:13:49+00:00"
+    },
+    {
+      "slug": "cisneros",
+      "name": "Gilbert Cisneros",
+      "marketValue": 15620528.85,
+      "dayChange": 50025.9,
+      "dayChangePct": 0.0032128634613159414,
+      "positions": 398,
+      "lastFiling": "2026-09-10",
+      "generatedAt": "2026-10-09T11:41:09+00:00"
+    },
+    {
+      "slug": "hill",
+      "name": "French Hill",
+      "marketValue": 591571.52,
+      "dayChange": 6140.69,
+      "dayChangePct": 0.010489181041089183,
+      "positions": 8,
+      "lastFiling": "2026-01-23",
+      "generatedAt": "2026-10-09T11:42:54+00:00"
+    },
+    {
+      "slug": "tuberville",
+      "name": "Tommy Tuberville",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": null,
+      "generatedAt": "2026-10-09T11:43:01+00:00"
+    },
+    {
+      "slug": "mcconnell",
+      "name": "Mitch McConnell",
+      "marketValue": 512176.46,
+      "dayChange": 1518.71,
+      "dayChangePct": 0.00297402709842445,
+      "positions": 2,
+      "lastFiling": "2026-09-21",
+      "generatedAt": "2026-10-09T11:43:33+00:00"
+    },
+    {
+      "slug": "schumer",
+      "name": "Chuck Schumer",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": null,
+      "generatedAt": "2026-10-09T11:43:40+00:00"
+    },
+    {
+      "slug": "warren",
+      "name": "Elizabeth Warren",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": "2013-01-30",
+      "generatedAt": "2026-10-09T11:43:47+00:00"
+    },
+    {
+      "slug": "cruz",
+      "name": "Ted Cruz",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": "2013-05-07",
+      "generatedAt": "2026-10-09T11:43:52+00:00"
+    },
+    {
+      "slug": "aoc",
+      "name": "Alexandria Ocasio-Cortez",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": null,
+      "generatedAt": "2026-10-09T11:43:56+00:00"
+    },
+    {
+      "slug": "jeffries",
+      "name": "Hakeem Jeffries",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": "2021-05-30",
+      "generatedAt": "2026-10-09T11:44:31+00:00"
+    },
+    {
+      "slug": "johnson",
+      "name": "Mike Johnson",
+      "marketValue": 0.0,
+      "dayChange": 0.0,
+      "dayChangePct": null,
+      "positions": 0,
+      "lastFiling": null,
+      "generatedAt": "2026-10-09T11:44:35+00:00"
     }
   ]
 }
