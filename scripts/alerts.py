@@ -75,11 +75,14 @@ def register_updates(token: str | None = None) -> dict:
         if text.startswith("/start"):
             code = text.split(maxsplit=1)[1].strip() if " " in text else ""
         pending = next((item for item in data["pending"] if item.get("code") == code), None) if code else None
-        name = " ".join(part for part in (chat.get("first_name"), chat.get("last_name")) if part)
+        handle = (chat.get("username") or "").strip().lstrip("@")
+        name = f"@{handle}" if handle else " ".join(part for part in (chat.get("first_name"), chat.get("last_name")) if part)
         subscriber = {
             "chatId": chat_id,
             "name": name or str(chat_id),
         }
+        if handle or (pending and pending.get("username")):
+            subscriber["username"] = handle or pending.get("username")
         data["subscribers"] = [item for item in data["subscribers"] if item.get("chatId") != chat_id]
         data["subscribers"].append(subscriber)
         if pending:

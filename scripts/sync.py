@@ -735,6 +735,10 @@ def collect_senate(member: dict) -> tuple[list[dict], list[dict]]:
 def collect_trades(http: requests.Session, member: dict, reparse: bool) -> tuple[dict, list[dict]]:
     if member.get("chamber") == "senate":
         stored_filings, trades = collect_senate(member)
+    elif member.get("chamber") == "executive":
+        from oge import collect_oge
+
+        stored_filings, trades = collect_oge(member)
     else:
         stored_filings, trades = collect_house(http, member, reparse)
     if not trades:
@@ -1460,6 +1464,16 @@ def build_snapshot(http: requests.Session, document: dict, member: dict) -> dict
             "url": "https://efdsearch.senate.gov/search/",
         }
         chamber = "U.S. Senate"
+    elif member.get("chamber") == "executive":
+        district = member.get("district") or ""
+        source = {
+            "name": "Office of Government Ethics",
+            "url": "https://extapps2.oge.gov/201/Presiden.nsf",
+        }
+        chamber = "President"
+        books.warn(
+            "These are OGE Form 278-T reports. Municipal bonds have no stock ticker, so they stay out of the priced stock book. Open the filing PDF to check a row."
+        )
     else:
         district = ""
         if filings:

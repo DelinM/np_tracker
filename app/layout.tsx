@@ -18,12 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = readLocale((await cookies()).get(LOCALE_COOKIE)?.value);
   if (locale === "zh") {
     return {
-      title: { default: "披露账本", template: "%s · 披露账本" },
+      title: { default: "eDisclosed", template: "%s · eDisclosed" },
       description: "根据官方定期交易报告还原的国会披露持仓。",
     };
   }
   return {
-    title: { default: "Disclosed books", template: "%s · Disclosed books" },
+    title: { default: "eDisclosed", template: "%s · eDisclosed" },
     description: "Congressional portfolios reconstructed from official periodic transaction reports.",
   };
 }

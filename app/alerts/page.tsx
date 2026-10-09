@@ -5,7 +5,7 @@ import { useI18n } from "@/lib/i18n";
 
 export default function AlertsPage() {
   const { copy } = useI18n();
-  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const [code, setCode] = useState("");
   const [url, setUrl] = useState("");
   const [configured, setConfigured] = useState(true);
@@ -18,29 +18,36 @@ export default function AlertsPage() {
     const response = await fetch("/api/alerts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, code }),
+      body: JSON.stringify({ username, code }),
     });
-    const body = await response.json();
-    if (!response.ok) {
-      setError(copy.phoneLabel);
+    let body: { code?: string; url?: string; configured?: boolean; linked?: boolean } = {};
+    try {
+      body = await response.json();
+    } catch {
+      body = {};
+    }
+    if (!response.ok || !body.url) {
+      setConfigured(false);
+      setCode(body.code || "missing");
+      setError(response.ok ? "" : copy.telegramLabel);
       return;
     }
-    setCode(body.code);
+    setCode(body.code ?? "");
     setUrl(body.url);
-    setConfigured(body.configured);
-    setLinked(body.linked);
-    if (body.url) window.open(body.url, "_blank", "noopener,noreferrer");
+    setConfigured(Boolean(body.configured));
+    setLinked(Boolean(body.linked));
   }
 
   async function check() {
     const response = await fetch("/api/alerts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, code }),
+      body: JSON.stringify({ username, code }),
     });
     const body = await response.json();
     setLinked(Boolean(body.linked));
-    setConfigured(body.configured);
+    setConfigured(Boolean(body.configured));
+    if (body.url) setUrl(body.url);
   }
 
   return (
@@ -55,13 +62,13 @@ export default function AlertsPage() {
       </ul>
       <form onSubmit={submit} className="mt-8 space-y-4">
         <label className="block text-sm">
-          <span className="text-muted">{copy.phoneLabel}</span>
+          <span className="text-muted">{copy.telegramLabel}</span>
           <input
-            value={phone}
-            onChange={(event) => setPhone(event.target.value)}
-            placeholder={copy.phonePlaceholder}
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            placeholder={copy.telegramPlaceholder}
             className="mt-2 w-full rounded-full border border-line bg-panel px-4 py-2 text-cream"
-            inputMode="tel"
+            autoComplete="off"
             required
           />
         </label>
@@ -73,7 +80,10 @@ export default function AlertsPage() {
       {!configured && code ? <p className="mt-4 text-sm text-gold">{copy.botMissing}</p> : null}
       {url ? (
         <div className="mt-6 space-y-3 text-sm">
-          <a href={url} target="_blank" rel="noreferrer" className="text-gold hover:underline">
+          <a href={url} target="_blank" rel="noreferrer" className="inline-block rounded-full bg-cream px-4 py-2 text-ink">
+            {copy.openBot}
+          </a>
+          <a href={url} target="_blank" rel="noreferrer" className="block text-gold hover:underline">
             {url}
           </a>
           <div>

@@ -27,6 +27,21 @@ type Copy = {
   alertsIncludes: string[];
   house: string;
   senate: string;
+  president: string;
+  sortMarket: string;
+  sortYearly: string;
+  sortOffice: string;
+  yearlyProfit: string;
+  activeYears: (years: string) => string;
+  activeYearsLabel: string;
+  yearsInOffice: string;
+  statToday: string;
+  searchLabel: string;
+  searchPlaceholder: string;
+  viewCards: string;
+  viewTable: string;
+  noNameMatches: string;
+  nameColumn: string;
   allMembers: string;
   alerts: string;
   sortValue: string;
@@ -36,8 +51,8 @@ type Copy = {
   oldest: string;
   alertsTitle: string;
   alertsLead: string;
-  phoneLabel: string;
-  phonePlaceholder: string;
+  telegramLabel: string;
+  telegramPlaceholder: string;
   openBot: string;
   botMissing: string;
   checkBot: string;
@@ -108,14 +123,14 @@ type Copy = {
 };
 
 const en: Copy = {
-  brand: "Disclosed book",
+  brand: "eDisclosed",
   member: "Nancy Pelosi",
   chamber: "U.S. House",
   sourceName: "Clerk of the House of Representatives",
   marked: (date) => `marked ${date}`,
   nav: { portfolio: "Portfolio", activity: "Activity" },
   language: "Language",
-  directoryEyebrow: "Disclosed books",
+  directoryEyebrow: "eDisclosed",
   directoryTitle: "Choose a member",
   directoryNote: "Each book is rebuilt from that member's official periodic transaction reports.",
   openBook: "Open book",
@@ -137,6 +152,21 @@ const en: Copy = {
   ],
   house: "House",
   senate: "Senate",
+  president: "President",
+  sortMarket: "Market value",
+  sortYearly: "Avg yearly profit",
+  sortOffice: "Years in office",
+  yearlyProfit: "Avg yearly profit",
+  activeYears: (years) => `${years} active years`,
+  activeYearsLabel: "Active years",
+  yearsInOffice: "Years in office",
+  statToday: "Today",
+  searchLabel: "Search",
+  searchPlaceholder: "Search by name",
+  viewCards: "Cards",
+  viewTable: "Table",
+  noNameMatches: "No one matches that name.",
+  nameColumn: "Name",
   allMembers: "All members",
   alerts: "Alerts",
   sortValue: "Market value",
@@ -146,14 +176,14 @@ const en: Copy = {
   oldest: "Oldest",
   alertsTitle: "Telegram alerts",
   alertsLead:
-    "Enter your mobile number, then open the bot and tap Start. Telegram cannot message a number until you do that. New disclosed trades are sent after the 9:00, 12:00, and 3:30 ET pulls.",
-  phoneLabel: "Mobile number",
-  phonePlaceholder: "+1 555 0100",
+    "Enter a Telegram username. The button opens this site’s bot. That person must tap Start once. Telegram cannot message a username that has not opened the bot. After Start, new trades go to that chat at 9:00, 12:00, and 3:30 ET.",
+  telegramLabel: "Telegram username",
+  telegramPlaceholder: "@username",
   openBot: "Open Telegram",
-  botMissing: "Add TELEGRAM_BOT_TOKEN and TELEGRAM_BOT_USERNAME before alerts can be delivered.",
+  botMissing: "No Telegram bot is connected yet, so this button has nowhere to go. Create a bot with @BotFather and add its username and token.",
   checkBot: "I've tapped Start",
   linked: "This chat is registered. New trades will be sent there.",
-  notLinked: "The bot has not seen this registration yet. Open Telegram, tap Start, then check again.",
+  notLinked: "Open the link and tap Start. Alerts are sent to that chat after the next scheduled pull.",
   marketValue: "Disclosed market value",
   today: "today",
   unrealized: "Unrealized",
@@ -225,18 +255,18 @@ const en: Copy = {
   footerLead: "Built from public",
   footerBody:
     "periodic transaction reports. Filings report dollar ranges, not a brokerage blotter, and they can arrive weeks after the trade. Share counts use the filing text when it states them; otherwise they are estimated from the midpoint of the range. A trade restated on a later report is counted once. This is a personal reconstruction, not an official account.",
-  title: "Pelosi Portfolio",
+  title: "eDisclosed",
 };
 
 const zh: Copy = {
-  brand: "披露持仓",
+  brand: "eDisclosed",
   member: "南希·佩洛西",
   chamber: "美国众议院",
   sourceName: "美国众议院书记官",
   marked: (date) => `截至 ${date}`,
   nav: { portfolio: "持仓", activity: "交易" },
   language: "语言",
-  directoryEyebrow: "披露账本",
+  directoryEyebrow: "eDisclosed",
   directoryTitle: "选择议员",
   directoryNote: "每本账都根据该议员的官方定期交易报告还原。",
   openBook: "打开账本",
@@ -258,6 +288,21 @@ const zh: Copy = {
   ],
   house: "众议院",
   senate: "参议院",
+  president: "总统",
+  sortMarket: "总市值",
+  sortYearly: "年均利润率",
+  sortOffice: "在任年限",
+  yearlyProfit: "年均利润率",
+  activeYears: (years) => `活跃 ${years} 年`,
+  activeYearsLabel: "活跃年数",
+  yearsInOffice: "在任年限",
+  statToday: "今日",
+  searchLabel: "搜索",
+  searchPlaceholder: "按姓名搜索",
+  viewCards: "卡片",
+  viewTable: "表格",
+  noNameMatches: "没有匹配的姓名。",
+  nameColumn: "姓名",
   allMembers: "全部议员",
   alerts: "提醒",
   sortValue: "市值",
@@ -267,14 +312,14 @@ const zh: Copy = {
   oldest: "最早",
   alertsTitle: "Telegram 提醒",
   alertsLead:
-    "填写手机号，然后打开机器人并点开始。在你点开始之前，Telegram 无法按号码发消息。新披露的交易会在美东时间 9:00、12:00 和 15:30 的拉取之后发出。",
-  phoneLabel: "手机号",
-  phonePlaceholder: "+1 555 0100",
+    "填写 Telegram 用户名。按钮会打开本站的机器人，对方需要点一次开始。没有打开过机器人的用户名，Telegram 无法发消息。点开始之后，新交易会在美东时间 9:00、12:00 和 15:30 发到那个对话。",
+  telegramLabel: "Telegram 用户名",
+  telegramPlaceholder: "@username",
   openBot: "打开 Telegram",
-  botMissing: "请先配置 TELEGRAM_BOT_TOKEN 和 TELEGRAM_BOT_USERNAME，提醒才能发出。",
+  botMissing: "还没有接上 Telegram 机器人，所以这个按钮没有地方可打开。请先在 @BotFather 创建机器人，并填上它的用户名和令牌。",
   checkBot: "我已点开始",
   linked: "这个对话已登记。之后的新交易会发到这里。",
-  notLinked: "机器人还没看到这次登记。请打开 Telegram 点开始，然后再检查一次。",
+  notLinked: "请打开链接并点开始。下一次定时拉取之后，提醒会发到那个对话。",
   marketValue: "披露市值",
   today: "今日",
   unrealized: "未实现",
@@ -346,7 +391,7 @@ const zh: Copy = {
   footerLead: "根据公开的",
   footerBody:
     "定期交易报告还原。申报给出的是金额区间，不是券商成交回单，而且可能在交易发生数周后才提交。股数优先采用申报正文中写明的数量，否则按区间中值估算。同一笔交易若在后续报告中重述，只计一次。这是个人还原，不是官方账户。",
-  title: "佩洛西持仓",
+  title: "eDisclosed",
 };
 
 const messages: Record<Locale, Copy> = { en, zh };

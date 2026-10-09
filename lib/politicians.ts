@@ -7,9 +7,10 @@ export type Politician = {
   first: string;
   name: string;
   nameZh: string;
-  chamber: "house" | "senate";
+  chamber: "house" | "senate" | "executive";
   district: string;
   party: string;
+  officeStart: string;
 };
 
 export const politicians = roster as Politician[];
@@ -32,6 +33,10 @@ export type MemberCard = Politician & {
   dayChangePct: number | null;
   positions: number | null;
   lastFiling: string | null;
+  totalPnlPct: number | null;
+  yearlyProfitPct: number | null;
+  activeYears: number | null;
+  yearsInOffice: number | null;
   ready: boolean;
   active: ActiveTrade[];
 };

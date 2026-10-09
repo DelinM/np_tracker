@@ -7,7 +7,8 @@
     "nameZh": "南希·佩洛西",
     "chamber": "house",
     "district": "CA-11",
-    "party": "D"
+    "party": "D",
+    "officeStart": "1987-06-02"
   },
   {
     "slug": "khanna",
@@ -17,7 +18,8 @@
     "nameZh": "罗·康纳",
     "chamber": "house",
     "district": "CA-17",
-    "party": "D"
+    "party": "D",
+    "officeStart": "2017-01-03"
   },
   {
     "slug": "mccaul",
@@ -27,7 +29,8 @@
     "nameZh": "迈克尔·麦考尔",
     "chamber": "house",
     "district": "TX-10",
-    "party": "R"
+    "party": "R",
+    "officeStart": "2005-01-03"
   },
   {
     "slug": "moody",
@@ -37,7 +40,8 @@
     "nameZh": "阿什莉·穆迪",
     "chamber": "senate",
     "district": "FL",
-    "party": "R"
+    "party": "R",
+    "officeStart": "2025-01-21"
   },
   {
     "slug": "fetterman",
@@ -47,6 +51,238 @@
     "nameZh": "约翰·费特曼",
     "chamber": "senate",
     "district": "PA",
-    "party": "D"
+    "party": "D",
+    "officeStart": "2023-01-03"
+  },
+  {
+    "slug": "trump",
+    "last": "trump",
+    "first": "donald",
+    "name": "Donald Trump",
+    "nameZh": "唐纳德·特朗普",
+    "chamber": "executive",
+    "district": "",
+    "party": "R",
+    "officeStart": "2025-01-20"
+  },
+  {
+    "slug": "gottheimer",
+    "last": "gottheimer",
+    "first": "josh",
+    "name": "Josh Gottheimer",
+    "nameZh": "乔希·戈特海默",
+    "chamber": "house",
+    "district": "NJ-5",
+    "party": "D",
+    "officeStart": "2017-01-03"
+  },
+  {
+    "slug": "delbene",
+    "last": "delbene",
+    "first": "suzan",
+    "name": "Suzan DelBene",
+    "nameZh": "苏赞·德尔贝内",
+    "chamber": "house",
+    "district": "WA-1",
+    "party": "D",
+    "officeStart": "2012-11-13"
+  },
+  {
+    "slug": "peters",
+    "last": "peters",
+    "first": "scott",
+    "name": "Scott Peters",
+    "nameZh": "斯科特·彼得斯",
+    "chamber": "house",
+    "district": "CA-50",
+    "party": "D",
+    "officeStart": "2013-01-03"
+  },
+  {
+    "slug": "rogers",
+    "last": "rogers",
+    "first": "harold",
+    "name": "Harold Rogers",
+    "nameZh": "哈罗德·罗杰斯",
+    "chamber": "house",
+    "district": "KY-5",
+    "party": "R",
+    "officeStart": "1981-01-03"
+  },
+  {
+    "slug": "allen",
+    "last": "allen",
+    "first": "richard",
+    "name": "Rick Allen",
+    "nameZh": "里克·艾伦",
+    "chamber": "house",
+    "district": "GA-12",
+    "party": "R",
+    "officeStart": "2015-01-03"
+  },
+  {
+    "slug": "hern",
+    "last": "hern",
+    "first": "kevin",
+    "name": "Kevin Hern",
+    "nameZh": "凯文·赫恩",
+    "chamber": "house",
+    "district": "OK-1",
+    "party": "R",
+    "officeStart": "2018-11-13"
+  },
+  {
+    "slug": "kelly",
+    "last": "kelly",
+    "first": "mike",
+    "name": "Mike Kelly",
+    "nameZh": "迈克·凯利",
+    "chamber": "house",
+    "district": "PA-16",
+    "party": "R",
+    "officeStart": "2011-01-03"
+  },
+  {
+    "slug": "foxx",
+    "last": "foxx",
+    "first": "virginia",
+    "name": "Virginia Foxx",
+    "nameZh": "弗吉尼亚·福克斯",
+    "chamber": "house",
+    "district": "NC-5",
+    "party": "R",
+    "officeStart": "2005-01-03"
+  },
+  {
+    "slug": "greene",
+    "last": "greene",
+    "first": "marjorie",
+    "name": "Marjorie Taylor Greene",
+    "nameZh": "马乔丽·泰勒·格林",
+    "chamber": "house",
+    "district": "GA-14",
+    "party": "R",
+    "officeStart": "2021-01-03"
+  },
+  {
+    "slug": "doggett",
+    "last": "doggett",
+    "first": "lloyd",
+    "name": "Lloyd Doggett",
+    "nameZh": "劳埃德·多格特",
+    "chamber": "house",
+    "district": "TX-37",
+    "party": "D",
+    "officeStart": "1995-01-03"
+  },
+  {
+    "slug": "cisneros",
+    "last": "cisneros",
+    "first": "gilbert",
+    "name": "Gilbert Cisneros",
+    "nameZh": "吉尔伯特·西斯内罗斯",
+    "chamber": "house",
+    "district": "CA-31",
+    "party": "D",
+    "officeStart": "2025-01-03"
+  },
+  {
+    "slug": "hill",
+    "last": "hill",
+    "first": "james french",
+    "name": "French Hill",
+    "nameZh": "弗伦奇·希尔",
+    "chamber": "house",
+    "district": "AR-2",
+    "party": "R",
+    "officeStart": "2015-01-03"
+  },
+  {
+    "slug": "tuberville",
+    "last": "Tuberville",
+    "first": "Tommy",
+    "name": "Tommy Tuberville",
+    "nameZh": "汤米·图伯维尔",
+    "chamber": "senate",
+    "district": "AL",
+    "party": "R",
+    "officeStart": "2021-01-03"
+  },
+  {
+    "slug": "mcconnell",
+    "last": "McConnell",
+    "first": "Mitch",
+    "name": "Mitch McConnell",
+    "nameZh": "米奇·麦康奈尔",
+    "chamber": "senate",
+    "district": "KY",
+    "party": "R",
+    "officeStart": "1985-01-03"
+  },
+  {
+    "slug": "schumer",
+    "last": "Schumer",
+    "first": "Charles",
+    "name": "Chuck Schumer",
+    "nameZh": "查克·舒默",
+    "chamber": "senate",
+    "district": "NY",
+    "party": "D",
+    "officeStart": "1999-01-03"
+  },
+  {
+    "slug": "warren",
+    "last": "Warren",
+    "first": "Elizabeth",
+    "name": "Elizabeth Warren",
+    "nameZh": "伊丽莎白·沃伦",
+    "chamber": "senate",
+    "district": "MA",
+    "party": "D",
+    "officeStart": "2013-01-03"
+  },
+  {
+    "slug": "cruz",
+    "last": "Cruz",
+    "first": "Ted",
+    "name": "Ted Cruz",
+    "nameZh": "特德·克鲁兹",
+    "chamber": "senate",
+    "district": "TX",
+    "party": "R",
+    "officeStart": "2013-01-03"
+  },
+  {
+    "slug": "aoc",
+    "last": "ocasio-cortez",
+    "first": "alexandria",
+    "name": "Alexandria Ocasio-Cortez",
+    "nameZh": "亚历山德里娅·奥卡西奥-科尔特斯",
+    "chamber": "house",
+    "district": "NY-14",
+    "party": "D",
+    "officeStart": "2019-01-03"
+  },
+  {
+    "slug": "jeffries",
+    "last": "jeffries",
+    "first": "hakeem",
+    "name": "Hakeem Jeffries",
+    "nameZh": "哈基姆·杰弗里斯",
+    "chamber": "house",
+    "district": "NY-8",
+    "party": "D",
+    "officeStart": "2013-01-03"
+  },
+  {
+    "slug": "johnson",
+    "last": "johnson",
+    "first": "mike",
+    "name": "Mike Johnson",
+    "nameZh": "迈克·约翰逊",
+    "chamber": "house",
+    "district": "LA-4",
+    "party": "R",
+    "officeStart": "2017-01-03"
   }
 ]

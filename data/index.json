@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T20:40:39+00:00",
+  "generatedAt": "2026-10-09T09:35:13+00:00",
   "members": [
     {
       "slug": "pelosi",
@@ -50,6 +50,16 @@
       "positions": 5,
       "lastFiling": "2026-10-07",
       "generatedAt": "2026-10-08T20:40:39+00:00"
+    },
+    {
+      "slug": "trump",
+      "name": "Donald Trump",
+      "marketValue": 93585020.11,
+      "dayChange": 69828.41,
+      "dayChangePct": 0.0007467065910152057,
+      "positions": 83,
+      "lastFiling": "2026-09-25",
+      "generatedAt": "2026-10-09T09:35:13+00:00"
     }
   ]
 }

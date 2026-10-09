@@ -29,12 +29,23 @@ export function Shell({ children }: { children: React.ReactNode }) {
       ];
   const source = politician?.chamber === "senate"
     ? { name: locale === "zh" ? "美国参议院财务披露" : "U.S. Senate Financial Disclosures", url: "https://efdsearch.senate.gov/search/" }
-    : { name: copy.sourceName, url: "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/" };
+    : politician?.chamber === "executive"
+      ? { name: locale === "zh" ? "美国政府道德办公室" : "Office of Government Ethics", url: "https://extapps2.oge.gov/201/Presiden.nsf" }
+      : { name: copy.sourceName, url: "https://disclosures-clerk.house.gov/public_disc/financial-pdfs/" };
+  const office = politician?.chamber === "senate" ? copy.senate : politician?.chamber === "executive" ? copy.president : copy.house;
 
   return (
     <div className="mx-auto min-h-screen max-w-6xl px-5 pb-16 pt-6 sm:px-8">
       <header className="flex flex-wrap items-end justify-between gap-6 border-b border-line pb-5">
-        <div>
+        <div className="flex items-end gap-4">
+          {politician ? (
+            <img
+              src={`/portraits/${politician.slug}.jpg`}
+              alt={locale === "zh" ? politician.nameZh : politician.name}
+              className="h-16 w-14 rounded-xl object-cover"
+            />
+          ) : null}
+          <div>
           <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-gold">
             {politician ? copy.brand : copy.directoryEyebrow}
           </p>
@@ -43,13 +54,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </h1>
           {politician ? (
             <p className="mt-1 text-sm text-muted">
-              {politician.chamber === "senate" ? copy.senate : copy.house}
+              {office}
               {politician.district ? ` · ${politician.district}` : ""}
               {politician.party ? ` · ${politician.party}` : ""}
             </p>
           ) : onAlerts ? null : (
             <p className="mt-1 max-w-xl text-sm text-muted">{copy.directoryNote}</p>
           )}
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex gap-1 rounded-full border border-line bg-panel/80 p-1" role="group" aria-label={copy.language}>

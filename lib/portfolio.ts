@@ -35,6 +35,14 @@ export function loadSnapshot(slug: string): Snapshot | null {
   return snapshot;
 }
 
+function yearsBetween(firstTrade: string | null, asOf: string | null) {
+  if (!firstTrade || !asOf) return null;
+  const start = Date.parse(`${firstTrade}T12:00:00Z`);
+  const end = Date.parse(asOf);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return null;
+  return Math.max((end - start) / (365.25 * 24 * 60 * 60 * 1000), 1 / 12);
+}
+
 function activeTrades(trades: Trade[]): ActiveTrade[] {
   const cutoff = new Date();
   cutoff.setMonth(cutoff.getMonth() - 2);
@@ -71,6 +79,8 @@ function activeTrades(trades: Trade[]): ActiveTrade[] {
 export function loadCards(): MemberCard[] {
   return politicians.map((member) => {
     const snapshot = loadSnapshot(member.slug);
+    const activeYears = yearsBetween(snapshot?.summary.firstTrade ?? null, snapshot?.asOf ?? null);
+    const totalPnlPct = snapshot?.summary.totalPnlPct ?? null;
     return {
       ...member,
       marketValue: snapshot?.summary.marketValue ?? null,
@@ -78,6 +88,10 @@ export function loadCards(): MemberCard[] {
       dayChangePct: snapshot?.summary.dayChangePct ?? null,
       positions: snapshot?.summary.positions ?? null,
       lastFiling: snapshot?.summary.lastFiling ?? null,
+      totalPnlPct,
+      yearlyProfitPct: totalPnlPct != null && activeYears ? totalPnlPct / activeYears : null,
+      activeYears,
+      yearsInOffice: yearsBetween(member.officeStart, snapshot?.asOf ?? new Date().toDateString()),
       ready: Boolean(snapshot),
       active: snapshot ? activeTrades(snapshot.trades) : [],
     };
