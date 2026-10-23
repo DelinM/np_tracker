@@ -11,6 +11,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
@@ -50,26 +51,41 @@ DROP_TOKENS = {
 
 
 def ocr_available() -> bool:
-    return shutil.which("swiftc") is not None or shutil.which("tesseract") is not None
+    # Vision OCR only works on macOS; Linux CI uses tesseract.
+    return (sys.platform == "darwin" and shutil.which("swiftc") is not None) or shutil.which(
+        "tesseract"
+    ) is not None
 
 
 def _swift_binary() -> Path | None:
-    if shutil.which("swiftc") is None:
+    # ocr_page.swift imports Apple Vision/AppKit — skip on Linux even if swiftc exists.
+    if sys.platform != "darwin" or shutil.which("swiftc") is None:
         return None
     CACHE.mkdir(parents=True, exist_ok=True)
     if not BINARY.exists() or SWIFT.stat().st_mtime > BINARY.stat().st_mtime:
-        subprocess.check_call(["swiftc", "-O", str(SWIFT), "-o", str(BINARY)])
-    return BINARY
+        try:
+            subprocess.check_call(["swiftc", "-O", str(SWIFT), "-o", str(BINARY)])
+        except (OSError, subprocess.SubprocessError):
+            return None
+    return BINARY if BINARY.exists() else None
 
 
 def _recognize(png: Path) -> list[dict] | None:
     binary = _swift_binary()
     if binary is not None:
-        raw = subprocess.check_output([str(binary), str(png)], timeout=90)
-        return json.loads(raw)
+        try:
+            raw = subprocess.check_output([str(binary), str(png)], timeout=90)
+            return json.loads(raw)
+        except (OSError, subprocess.SubprocessError, json.JSONDecodeError):
+            pass
     if shutil.which("tesseract") is None:
         return None
-    raw = subprocess.check_output(["tesseract", str(png), "stdout", "tsv"], timeout=90, stderr=subprocess.DEVNULL)
+    try:
+        raw = subprocess.check_output(
+            ["tesseract", str(png), "stdout", "tsv"], timeout=90, stderr=subprocess.DEVNULL
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
     image = Image.open(png)
     width, height = image.size
     tokens = []
