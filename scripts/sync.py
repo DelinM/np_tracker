@@ -119,13 +119,8 @@ def house_name_match(last: str, first: str, member: dict) -> bool:
 
 def due_now() -> bool:
     now = datetime.now(NY)
-    if now.weekday() >= 5:
-        return False
     minutes = now.hour * 60 + now.minute
-    for hour, minute in ((7, 0), (12, 0)):
-        if abs(minutes - (hour * 60 + minute)) <= 20:
-            return True
-    return False
+    return abs(minutes - 7 * 60) <= 20
 
 
 def now_iso() -> str:
@@ -1596,14 +1591,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Sync congressional PTR filings into portfolio snapshots.")
     parser.add_argument("--reparse", action="store_true", help="Re-read every cached PDF.")
     parser.add_argument("--only", nargs="*", help="Slugs to sync, for example pelosi khanna.")
-    parser.add_argument("--if-due", action="store_true", help="Exit unless it is 7:00 or 12:00 ET on a weekday.")
+    parser.add_argument("--if-due", action="store_true", help="Exit unless it is about 7:00 ET.")
     parser.add_argument("--debug-pdf", nargs="*", help="Parse local PDFs and exit.")
     args = parser.parse_args()
     if args.debug_pdf:
         debug_pdfs(args.debug_pdf)
         return
     if args.if_due and not due_now():
-        print("[sync] outside the weekday 7:00 and 12:00 ET windows")
+        print("[sync] outside the daily 7:00 ET window")
         return
     members = load_members()
     if args.only:
