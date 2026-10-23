@@ -1,4 +1,6 @@
-"""Tell registered Telegram chats when a new disclosed trade shows up.
+"""Tell registered Telegram chats when a sync finds new disclosed trades.
+
+After every daily pull, subscribers also get a short notice when nothing is new.
 
 Telegram cannot text a phone number until that person has opened the bot.
 The phone number is only a label. Delivery uses the chat id from /start.
@@ -12,6 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ALERTS_PATH = ROOT / "data" / "alerts.json"
+EMPTY_DAY_MESSAGE = "Daily pull completed — nothing to update."
 
 
 def load_env() -> None:
@@ -171,15 +174,27 @@ def send_trades(sections: list[tuple[str, list[dict]]]) -> None:
     load_env()
     token = os.environ.get("TELEGRAM_BOT_TOKEN") or ""
     fresh = [(name, trades) for name, trades in sections if trades]
-    if not token or not fresh:
-        if fresh and not token:
+    if not token:
+        if fresh:
             print("[telegram] new trades found, but TELEGRAM_BOT_TOKEN is not set")
         return
     data = register_updates(token)
     if not data["subscribers"]:
-        print("[telegram] new trades found, no subscribers yet")
+        if fresh:
+            print("[telegram] new trades found, no subscribers yet")
+        else:
+            print("[telegram] no new trades, no subscribers yet")
         return
-    text = render_message(fresh)
+    if fresh:
+        text = render_message(fresh)
+        for subscriber in data["subscribers"]:
+            _api(token, "sendMessage", {"chat_id": subscriber["chatId"], "text": text, "disable_web_page_preview": True})
+        print(f"[telegram] sent {sum(len(trades) for _, trades in fresh)} trades to {len(data['subscribers'])} chats")
+        return
     for subscriber in data["subscribers"]:
-        _api(token, "sendMessage", {"chat_id": subscriber["chatId"], "text": text, "disable_web_page_preview": True})
-    print(f"[telegram] sent {sum(len(trades) for _, trades in fresh)} trades to {len(data['subscribers'])} chats")
+        _api(
+            token,
+            "sendMessage",
+            {"chat_id": subscriber["chatId"], "text": EMPTY_DAY_MESSAGE, "disable_web_page_preview": True},
+        )
+    print(f"[telegram] sent empty-day notice to {len(data['subscribers'])} chats")
