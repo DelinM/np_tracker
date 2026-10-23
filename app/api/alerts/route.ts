@@ -80,9 +80,47 @@ async function pull(data: AlertsFile) {
   return data;
 }
 
+const EMPTY_DAY_MESSAGE = "Daily pull completed — nothing to update.";
+
+async function notifySubscribers(data: AlertsFile, text: string) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token || data.subscribers.length === 0) {
+    return { sent: 0, error: token ? "no_subscribers" : "no_token" as string | undefined };
+  }
+  let sent = 0;
+  for (const subscriber of data.subscribers) {
+    const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: subscriber.chatId,
+        text,
+        disable_web_page_preview: true,
+      }),
+    });
+    const body = (await response.json()) as { ok?: boolean };
+    if (body.ok) sent += 1;
+  }
+  return { sent };
+}
+
 export async function POST(request: Request) {
-  const body = (await request.json()) as { username?: string; code?: string };
+  const body = (await request.json()) as { username?: string; code?: string; notify?: boolean };
   const requested = normalizeUsername(body.username ?? "");
+  // Manual empty-day notify: pull Telegram chats, then message every subscriber.
+  if (body.notify) {
+    const data = await pull(load());
+    const result = await notifySubscribers(data, EMPTY_DAY_MESSAGE);
+    return NextResponse.json({
+      notified: true,
+      subscribers: data.subscribers.map((item) => ({
+        chatId: item.chatId,
+        name: item.name,
+        username: item.username,
+      })),
+      ...result,
+    });
+  }
   if (!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(requested)) {
     return NextResponse.json({ error: "username" }, { status: 400 });
   }

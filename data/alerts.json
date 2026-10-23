@@ -1,5 +1,11 @@
 {
   "offset": 0,
-  "subscribers": [],
+  "subscribers": [
+    {
+      "chatId": 5406829496,
+      "name": "@okkkieess",
+      "username": "okkkieess"
+    }
+  ],
   "pending": []
 }
