@@ -148,7 +148,7 @@ const en: Copy = {
     "At most 12 trades for each member. Any further trades are a single count, and the message stops at 4,000 characters.",
     "No profit and no phone number.",
     "The first saved book for a member does not send an alert. Later pulls send only trades that were not already in the saved file.",
-    "Messages go to Telegram chats that have tapped Start, after the 9:00, 12:00, and 3:30 ET pulls.",
+    "Messages go to Telegram chats that have tapped Start, after the daily 7:00 ET pull.",
   ],
   house: "House",
   senate: "Senate",
@@ -176,7 +176,7 @@ const en: Copy = {
   oldest: "Oldest",
   alertsTitle: "Telegram alerts",
   alertsLead:
-    "Enter a Telegram username. The button opens this site’s bot. That person must tap Start once. Telegram cannot message a username that has not opened the bot. After Start, new trades go to that chat at 9:00, 12:00, and 3:30 ET.",
+    "Enter a Telegram username. The button opens this site’s bot. That person must tap Start once. Telegram cannot message a username that has not opened the bot. After Start, new trades go to that chat after the daily 7:00 ET pull.",
   telegramLabel: "Telegram username",
   telegramPlaceholder: "@username",
   openBot: "Open Telegram",

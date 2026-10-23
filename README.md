@@ -20,7 +20,7 @@ Open [http://localhost:3000](http://localhost:3000). The dev server is on port 3
 
 ## Schedule
 
-The sync is meant to run at 7:00 and 12:00 America/New_York, Monday through Friday. `.github/workflows/daily-sync.yml` starts at the UTC hours that correspond to those times in both EST and EDT. A run that is not actually one of those local times exits without doing work. You can also run it by hand with `workflow_dispatch`.
+The sync is meant to run once a day at 7:00 America/New_York. `.github/workflows/daily-sync.yml` starts at the UTC hours that correspond to that time in both EST and EDT. A run that is not actually 7:00 local time exits without doing work. You can also run it by hand with `workflow_dispatch`.
 
 ## Telegram
 
@@ -34,8 +34,8 @@ Telegram will not text a phone number until that chat has opened the bot. The nu
 
 The site can stay up without this laptop.
 
-- **Website:** Vercel, at [edisclosed.vercel.app](https://edisclosed.vercel.app). Connect the GitHub repo in the project Git settings so every push to `tracker`, including a weekday pull that saved new filings, deploys the site. Set the same two Telegram variables in the Vercel project if you want the Alerts page to open the bot.
-- **The weekday pulls:** GitHub Actions, already in `.github/workflows/daily-sync.yml`, at 7:00 and 12:00 Eastern. Disable that workflow when you want the pulls to stop.
+- **Website:** Vercel, at [edisclosed.vercel.app](https://edisclosed.vercel.app). Connect the GitHub repo in the project Git settings so every push to `tracker`, including a daily pull that saved new filings, deploys the site. Set the same two Telegram variables in the Vercel project if you want the Alerts page to open the bot.
+- **The daily pull:** GitHub Actions, already in `.github/workflows/daily-sync.yml`, once at 7:00 Eastern. Disable that workflow when you want the pulls to stop.
 
 That split is the one that keeps running after the computer is closed. A VPS or a `launchd` job on this Mac also works, but the Mac job stops when the machine sleeps.
 
