@@ -114,6 +114,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       notified: true,
       subscribers: data.subscribers.map((item) => ({
+        chatId: item.chatId,
         name: item.name,
         username: item.username,
       })),
