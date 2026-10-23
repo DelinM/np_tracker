@@ -1,11 +1,11 @@
 {
   "offset": 0,
-  "subscribers": [],
-  "pending": [
+  "subscribers": [
     {
-      "code": "9c54e341",
-      "createdAt": "2026-10-23T13:07:31.000Z",
+      "chatId": 5406829496,
+      "name": "@okkkieess",
       "username": "okkkieess"
     }
-  ]
+  ],
+  "pending": []
 }
